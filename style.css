@@ -28,6 +28,47 @@ body {
   padding: 10px;
 }
 
+@keyframes shake {
+  0% {
+    transform: translateY(0);
+  }
+
+  25% {
+    transform: translateY(-5px);
+  }
+
+  50% {
+    transform: translateY(5px);
+  }
+
+  75% {
+    transform: translateY(-5px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOutErro {
+  0% {
+    border-color: red;
+  }
+
+  100% {
+    border-color: #ccc;
+  }
+}
+
+.erro {
+  border: 2px solid red;
+  animation: shake 0.3s;
+}
+
+.removendo-erro {
+  animation: fadeOutErro 0.3s;
+}
+
 /* CARD */
 .card {
   background: #ffffff;
@@ -94,8 +135,12 @@ select:focus {
 
 /* SEÇÕES */
 .section {
-  margin-top: 15px;
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  align-items: center;
 }
+
 
 /* BOTÃO */
 button {

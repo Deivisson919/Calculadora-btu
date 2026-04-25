@@ -21,14 +21,40 @@ function calcularBTU() {
   let forro = document.getElementById("forro").value;
 
   // Alerta
-  if (isNaN(largura) || isNaN(comprimento) || largura <= 0 || comprimento <= 0) {
-    document.getElementById("resultado").innerHTML = "Preencha largura e comprimento corretamente.";
+  let inputLargura = document.getElementById("largura");
+  let inputComprimento = document.getElementById("comprimento");
+  let inputParedes = document.getElementById("sol");
+  
+  // largura
+  if (!largura || largura <= 0) {
+    inputLargura.classList.add("erro");
     return;
+  } else {
+    inputLargura.classList.remove("erro");
   }
-
-  if (janelas > 0 && !tipoJanela) {
-    document.getElementById("resultado").innerHTML = "⚠️ Informe o tipo de janela.";
+  
+  // comprimento
+  if (!comprimento || comprimento <= 0) {
+    inputComprimento.classList.add("erro");
     return;
+  } else {
+    inputComprimento.classList.remove("erro");
+  }
+  
+  // paredes
+  if (paredes > 0 && sol ==="") {
+    inputParedes.classList.add("erro");
+    return;
+  } else {
+    inputParedes.classList.remove("erro");
+  }
+  let inputJanela = document.getElementById("janela");
+
+  if (janelas > 0 && tipoJanela === "") {
+    inputJanela.classList.add("erro");
+    return;
+  } else {
+    inputJanela.classList.remove("erro");
   }
 
   let pessoasExtra = pessoas > 1 ? pessoas - 1 : 0;
@@ -126,6 +152,42 @@ indexEditando = null;
 modoVisualizacao = false;
 
 carregarHistorico();
+
+// função de alerta 
+window.onload = function () {
+  let inputLargura = document.getElementById("largura");
+  let inputComprimento = document.getElementById("comprimento");
+  let inputParedes = document.getElementById("sol");
+  let inputJanela = document.getElementById("janela");
+
+  inputLargura.addEventListener("input", function () {
+    this.classList.remove("erro");
+  });
+
+  inputComprimento.addEventListener("input", function () {
+    this.classList.remove("erro");
+  });
+
+  inputParedes.addEventListener("input", function () {
+    this.classList.remove("erro");
+  });inputLargura.addEventListener("input", function () {
+    this.classList.remove("erro");
+  });
+
+  inputComprimento.addEventListener("input", function () {
+    this.classList.remove("erro");
+  });
+
+  inputParedes.addEventListener("input", function () {
+    this.classList.remove("erro");
+  });
+
+  inputJanela.addEventListener("input", function () {
+    if (this.value !== "") {
+      this.classList.remove("erro");
+    }
+  });
+};
 
 //limpa o formulario
 document.querySelectorAll("input").forEach(i => i.value = "");
