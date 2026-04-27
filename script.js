@@ -89,46 +89,50 @@ function calcularBTU() {
 
   // 🔧 PROCESSAMENTO
   let projeto = classificarProjeto(btuTotal, pessoas);
-  let rec = recomendacaoFinal(btuTotal);
-  let mostrarAlternativas = rec.tipo === "multi";
   let diagnostico = diagnosticoSistema(btuTotal);
+  let rec = recomendacaoFinal(btuTotal);
 
   // 📊 RESULTADO
   document.getElementById("resultado").innerHTML =
     `📍 <strong>${nomeAmbiente}</strong><br>
      🔥 <strong>${btuTotal.toLocaleString("pt-BR")} BTU</strong>`;
 
-  document.getElementById("recomendacao").innerHTML =
-    `
-    <strong>Classificação:</strong> ${projeto.tipo}<br>
-    <strong>Nível técnico:</strong> ${projeto.nivel}<br><br>
+     document.getElementById("recomendacao").innerHTML =
+     `
+     <strong>Classificação:</strong> ${projeto.tipo}<br>
+     <strong>Nível técnico:</strong> ${projeto.nivel}<br><br>
+     
+     📊 <strong>Nível do projeto:</strong><br>
+     <span style="color:${diagnostico.cor}; font-weight:bold;">
+       ${diagnostico.nivel}
+     </span><br>
+     
+     🏗️ <strong>Sistema recomendado:</strong><br>
+     ${diagnostico.sistema}<br><br>
+     
+     ${diagnostico.alerta ? `⚠️ ${diagnostico.alerta}<br><br>` : "" }  
+     
+     ${projeto.alerta ? `⚠️ ${projeto.alerta}<br>` : ""}
+     
+     ${btuTotal > 250000 ? `
+     🚫 <strong>Atenção crítica:</strong><br>
+     Este projeto excede o uso recomendado de ar split.<br>
+     Utilize sistema central (VRF / Chiller).
+     ` : ""}
+     `;
 
-    📊 <strong>Nível do projeto:</strong><br>
-    <span style="color:${diagnostico.cor}; font-weight:bold;">
-      ${diagnostico.nivel}
-    </span><br>
+     document.getElementById("distribuicao").innerHTML = `
+📌 <strong>Cálculo total:</strong> ${btuTotal.toLocaleString("pt-BR")} BTU<br><br>
 
-    🏗️ <strong>Sistema recomendado:</strong><br>
-    ${diagnostico.sistema}<br><br>
+🌬️ Espaço aberto:<br>
+${rec.aberto}<br><br>
 
-    ${diagnostico.alerta ? `⚠️ ${diagnostico.alerta}<br><br>` : ""}
+🏢 Espaço com divisões:<br>
+${rec.divisoes}<br><br>
 
-    🔧 <strong>Recomendado:</strong><br>
-    ${rec.ideal}<br><br>
-
-    ${mostrarAlternativas ? `
-    🔄 <strong>Alternativas:</strong><br>
-    • ${rec.alt1}<br>
-    • ${rec.alt2}<br><br>` : ""}
-
-    ${projeto.alerta ? `⚠️ ${projeto.alerta}<br>` : ""}
-
-    ${btuTotal > 250000 ? `
-    🚫 <strong>Atenção crítica:</strong><br>
-    Este projeto excede o uso recomendado de ar split.<br>
-    Utilize sistema central (VRF / Chiller).
-    ` : ""}
-    `;
+🧱 Fluxo de ar difícil:<br>
+${rec.fluxo}<br><br>
+`;
 
   // 💾 SALVAR
   salvarCalculo({
@@ -145,7 +149,11 @@ function calcularBTU() {
     sol,
     forro,
     btu: btuTotal,
-    recomendacao: rec.ideal
+    distribuicao: {
+      aberto: rec.aberto,
+      divisoes: rec.divisoes,
+      fluxo: rec.fluxo
+    }
   });
 
 indexEditando = null; 
@@ -153,44 +161,7 @@ modoVisualizacao = false;
 
 carregarHistorico();
 
-// função de alerta 
-window.onload = function () {
-  let inputLargura = document.getElementById("largura");
-  let inputComprimento = document.getElementById("comprimento");
-  let inputParedes = document.getElementById("sol");
-  let inputJanela = document.getElementById("janela");
-
-  inputLargura.addEventListener("input", function () {
-    this.classList.remove("erro");
-  });
-
-  inputComprimento.addEventListener("input", function () {
-    this.classList.remove("erro");
-  });
-
-  inputParedes.addEventListener("input", function () {
-    this.classList.remove("erro");
-  });inputLargura.addEventListener("input", function () {
-    this.classList.remove("erro");
-  });
-
-  inputComprimento.addEventListener("input", function () {
-    this.classList.remove("erro");
-  });
-
-  inputParedes.addEventListener("input", function () {
-    this.classList.remove("erro");
-  });
-
-  inputJanela.addEventListener("input", function () {
-    if (this.value !== "") {
-      this.classList.remove("erro");
-    }
-  });
-};
-
 //limpa o formulario
-document.querySelectorAll("input").forEach(i => i.value = "");
 document.querySelectorAll("select").forEach(s => s.value = "");
 let btn = document.getElementById("btnCalcular");
 btn.innerHTML = "Calcular";
@@ -227,82 +198,30 @@ function classificarProjeto(btuTotal, pessoas) {
   };
 }
 
-// 🔧 CAPACIDADE
-function recomendarCapacidade(btu) {
-  if (btu <= 9000) return 9000;
-  if (btu <= 12000) return 12000;
-  if (btu <= 18000) return 18000;
-  if (btu <= 24000) return 24000;
-  if (btu <= 30000) return 30000;
-  if (btu <= 36000) return 36000;
-  if (btu <= 48000) return 48000;
-  if (btu <= 60000) return 60000;
-  return Math.ceil(btu / 24000) * 24000;
+function combinarBTU(btu) {
+  let capacidades = [60000, 48000, 36000, 24000, 18000, 12000, 9000];
+  let resultado = [];
+
+  for (let cap of capacidades) {
+    while (btu >= cap * 0.9) {
+      resultado.push(cap);
+      btu -= cap;
+    }
+  }
+
+  if (btu > 0) resultado.push(9000);
+
+  return resultado.map(v => v.toLocaleString("pt-BR")).join(" + ");
 }
 
 function recomendacaoFinal(btuTotal) {
-
-  let capacidadeIdeal = recomendarCapacidade(btuTotal);
-
-  // 🔹 1. Até 36k → 1 aparelho
-  if (capacidadeIdeal <= 36000) {
-    return {
-      tipo: "single",
-      ideal: `1 aparelho de ${capacidadeIdeal.toLocaleString("pt-BR")} BTU`,
-      alt1: `${Math.ceil(btuTotal / 24000)} aparelho(s) de 24.000 BTU`,
-      alt2: `${Math.ceil(btuTotal / 18000)} aparelho(s) de 18.000 BTU`
-    };
-  }
-
-  // 🔹 2. Entre 36k e 60k → decisão inteligente
-  if (btuTotal > 36000 && btuTotal <= 60000) {
-
-    let qtd24k = calcularQtd24k(btuTotal);
-
-    // Se 2x24k resolver bem → usa
-    if (qtd24k <= 2) {
-      return {
-        tipo: "multi",
-        ideal: `${qtd24k} aparelho(s) de 24.000 BTU`,
-        alt1: `1 aparelho de 60.000 BTU`,
-        alt2: `${Math.ceil(btuTotal / 18000)} aparelho(s) de 18.000 BTU`
-      };
-    }
-
-    // Senão, prioriza 60k
-    return {
-      tipo: "multi",
-      ideal: `1 aparelho de 60.000 BTU`,
-      alt1: `${qtd24k} aparelho(s) de 24.000 BTU`,
-      alt2: `${Math.ceil(btuTotal / 18000)} aparelho(s) de 18.000 BTU`
-    };
-  }
-
-  // 🔹 3. Acima de 60k → prioriza menos máquinas (60k)
-  let qtd60k = Math.ceil(btuTotal / 60000);
-  let qtd24k = calcularQtd24k(btuTotal);
-
   return {
-    tipo: "multi",
-    ideal: `${qtd60k} aparelho(s) de 60.000 BTU`,
-    alt1: `${qtd24k} aparelho(s) de 24.000 BTU`,
-    alt2: `${Math.ceil(btuTotal / 18000)} aparelho(s) de 18.000 BTU`
+    aberto: combinarBTU(btuTotal),
+    divisoes: combinarBTU(btuTotal * 1.2),
+    fluxo: combinarBTU(btuTotal * 1.4)
   };
 }
 
-function calcularQtd24k(btu) {
-  let capacidade = 24000;
-  let tolerancia = 0.05;
-
-  let qtd = Math.floor(btu / capacidade);
-  let sobra = btu - (qtd * capacidade);
-
-  if (sobra > capacidade * tolerancia) {
-    qtd++;
-  }
-
-  return qtd || 1;
-}
 
 // 🧠 DIAGNÓSTICO
 function diagnosticoSistema(btuTotal) {
@@ -375,41 +294,43 @@ function verItem(index) {
      let btuTotal = item.btu;
 
      let projeto = classificarProjeto(btuTotal, item.pessoas);
-     let rec = recomendacaoFinal(btuTotal);
-     let mostrarAlternativas = rec.tipo === "multi";
      let diagnostico = diagnosticoSistema(btuTotal);
+     let rec = recomendacaoFinal(btuTotal);
      
      document.getElementById("recomendacao").innerHTML =
-       `
-       <strong>Classificação:</strong> ${projeto.tipo}<br>
-       <strong>Nível técnico:</strong> ${projeto.nivel}<br><br>
+     `
+     <strong>Classificação:</strong> ${projeto.tipo}<br>
+     <strong>Nível técnico:</strong> ${projeto.nivel}<br><br>
      
-       📊 <strong>Nível do projeto:</strong><br>
-       <span style="color:${diagnostico.cor}; font-weight:bold;">
-         ${diagnostico.nivel}
-       </span><br>
+     📊 <strong>Nível do projeto:</strong><br>
+     <span style="color:${diagnostico.cor}; font-weight:bold;">
+       ${diagnostico.nivel}
+     </span><br>
      
-       🏗️ <strong>Sistema recomendado:</strong><br>
-       ${diagnostico.sistema}<br><br>
+     🏗️ <strong>Sistema recomendado:</strong><br>
+     ${diagnostico.sistema}<br><br>
      
-       ${diagnostico.alerta ? `⚠️ ${diagnostico.alerta}<br><br>` : ""}
+     ${diagnostico.alerta ? `⚠️ ${diagnostico.alerta}<br><br>` : ""}
      
-       🔧 <strong>Recomendado:</strong><br>
-       ${rec.ideal}<br><br>
+     📌 Cálculo total: ${btuTotal.toLocaleString("pt-BR")} BTU<br><br>
      
-       ${mostrarAlternativas ? `
-       🔄 <strong>Alternativas:</strong><br>
-       • ${rec.alt1}<br>
-       • ${rec.alt2}<br><br>` : ""}
+     🌬️ Espaço aberto (melhor circulação de ar):<br>
+     ${rec.aberto}<br><br>
      
-       ${projeto.alerta ? `⚠️ ${projeto.alerta}<br>` : ""}
+     🏢 Espaço com divisões:<br>
+     ${rec.divisoes}<br><br>
      
-       ${btuTotal > 250000 ? `
-       🚫 <strong>Atenção crítica:</strong><br>
-       Este projeto excede o uso recomendado de ar split.<br>
-       Utilize sistema central (VRF / Chiller).
-       ` : ""}
-       `;
+     🧱 Espaço com muita dificuldade no fluxo de ar:<br>
+     ${rec.fluxo}<br><br>
+     
+     ${projeto.alerta ? `⚠️ ${projeto.alerta}<br>` : ""}
+     
+     ${btuTotal > 250000 ? `
+     🚫 <strong>Atenção crítica:</strong><br>
+     Este projeto excede o uso recomendado de ar split.<br>
+     Utilize sistema central (VRF / Chiller).
+     ` : ""}
+     `;
 
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
@@ -439,6 +360,7 @@ let modoVisualizacao = false;
 function acaoBotao(){
   if (modoVisualizacao){
      voltarParaCalculo();
+     document.querySelectorAll("input").forEach(i => i.value = "");
   }
   else {
     calcularBTU();
@@ -498,7 +420,11 @@ function carregarHistorico() {
           <strong>${item.nome}</strong><br>
           <strong>${item.btu.toLocaleString("pt-BR")} BTU</strong><br>
           <small>${item.data}</small><br>
-          <span style="color:#22c55e;">${item.recomendacao}</span>
+          <div style="color:#22c55e; margin-top:6px;">
+            🌬️ Aberto: ${item.distribuicao?.aberto}<br>
+            🏢 Divisões: ${item.distribuicao?.divisoes}<br>
+            🧱 Fluxo: ${item.distribuicao?.fluxo}
+          </div>
         </div>
 
         <div style="display:flex; flex-direction:column; gap:6px;">
@@ -532,7 +458,33 @@ function excluirItem(index) {
   carregarHistorico();
 }
 
-window.onload = carregarHistorico;
+// função de alerta 
+window.addEventListener("load", function () {
+  carregarHistorico();
+
+  let inputLargura = document.getElementById("largura");
+  let inputComprimento = document.getElementById("comprimento");
+  let inputParedes = document.getElementById("sol");
+  let inputJanela = document.getElementById("janela");
+
+  inputLargura.addEventListener("input", function () {
+    this.classList.remove("erro");
+  });
+
+  inputComprimento.addEventListener("input", function () {
+    this.classList.remove("erro");
+  });
+
+  inputParedes.addEventListener("change", function () {
+    this.classList.remove("erro");
+  });
+
+  inputJanela.addEventListener("change", function () {
+    if (this.value !== "") {
+      this.classList.remove("erro");
+    }
+  });
+});
 
 window.verItem = verItem;
 window.editarItem = editarItem;
