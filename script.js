@@ -1,7 +1,9 @@
 let indexEditando = null;
+const capacidades = [9000, 12000, 18000, 24000, 30000, 36000, 48000, 60000];
 
 //  CALCULAR
 function calcularBTU() {
+
   let nomeInput = document.getElementById("nomeAmbiente");
   let nomeAmbiente = nomeInput ? nomeInput.value.trim() : "";
   if (!nomeAmbiente) nomeAmbiente = "Ambiente";
@@ -20,42 +22,31 @@ function calcularBTU() {
   let sol = document.getElementById("sol").value;
   let forro = document.getElementById("forro").value;
 
-  // Alerta
+  // 🔴 VALIDAÇÕES
   let inputLargura = document.getElementById("largura");
   let inputComprimento = document.getElementById("comprimento");
-  let inputParedes = document.getElementById("sol");
-  
-  // largura
+  let inputSol = document.getElementById("sol");
+  let inputJanela = document.getElementById("janela");
+
   if (!largura || largura <= 0) {
     inputLargura.classList.add("erro");
     return;
-  } else {
-    inputLargura.classList.remove("erro");
-  }
-  
-  // comprimento
+  } else inputLargura.classList.remove("erro");
+
   if (!comprimento || comprimento <= 0) {
     inputComprimento.classList.add("erro");
     return;
-  } else {
-    inputComprimento.classList.remove("erro");
-  }
-  
-  // paredes
-  if (paredes > 0 && sol ==="") {
-    inputParedes.classList.add("erro");
+  } else inputComprimento.classList.remove("erro");
+
+  if (paredes > 0 && sol === "") {
+    inputSol.classList.add("erro");
     return;
-  } else {
-    inputParedes.classList.remove("erro");
-  }
-  let inputJanela = document.getElementById("janela");
+  } else inputSol.classList.remove("erro");
 
   if (janelas > 0 && tipoJanela === "") {
     inputJanela.classList.add("erro");
     return;
-  } else {
-    inputJanela.classList.remove("erro");
-  }
+  } else inputJanela.classList.remove("erro");
 
   let pessoasExtra = pessoas > 1 ? pessoas - 1 : 0;
 
@@ -66,75 +57,34 @@ function calcularBTU() {
     (eletronicos * 600) +
     (portas * 400);
 
-  // 🪟 JANELAS
   if (tipoJanela && janelas > 0) {
     if (tipoJanela === "1") btuTotal += janelas * 400;
     if (tipoJanela === "2") btuTotal += janelas * 800;
     if (tipoJanela === "3") btuTotal += janelas * 1200;
   }
 
-  // ☀️ SOL
   if (paredes > 0 && sol) {
     if (sol === "1") btuTotal += btuTotal * 0.10;
     if (sol === "2") btuTotal += btuTotal * 0.05;
   }
 
-  // 🏠 FORRO
   if (forro === "1") btuTotal += 800;
 
-  // 🧱 PAREDES
   btuTotal += paredes * 800;
 
   btuTotal = Math.ceil(btuTotal);
 
-  // 🔧 PROCESSAMENTO
-  let projeto = classificarProjeto(btuTotal, pessoas);
-  let diagnostico = diagnosticoSistema(btuTotal);
-  let rec = recomendacaoFinal(btuTotal);
-
-  // 📊 RESULTADO
+  // 📊 RESULTADO 
   document.getElementById("resultado").innerHTML =
     `📍 <strong>${nomeAmbiente}</strong><br>
      🔥 <strong>${btuTotal.toLocaleString("pt-BR")} BTU</strong>`;
 
-     document.getElementById("recomendacao").innerHTML =
-     `
-     <strong>Classificação:</strong> ${projeto.tipo}<br>
-     <strong>Nível técnico:</strong> ${projeto.nivel}<br><br>
-     
-     📊 <strong>Nível do projeto:</strong><br>
-     <span style="color:${diagnostico.cor}; font-weight:bold;">
-       ${diagnostico.nivel}
-     </span><br>
-     
-     🏗️ <strong>Sistema recomendado:</strong><br>
-     ${diagnostico.sistema}<br><br>
-     
-     ${diagnostico.alerta ? `⚠️ ${diagnostico.alerta}<br><br>` : "" }  
-     
-     ${projeto.alerta ? `⚠️ ${projeto.alerta}<br>` : ""}
-     
-     ${btuTotal > 250000 ? `
-     🚫 <strong>Atenção crítica:</strong><br>
-     Este projeto excede o uso recomendado de ar split.<br>
-     Utilize sistema central (VRF / Chiller).
-     ` : ""}
-     `;
-
-     document.getElementById("distribuicao").innerHTML = `
-📌 <strong>Cálculo total:</strong> ${btuTotal.toLocaleString("pt-BR")} BTU<br><br>
-
-🌬️ Espaço aberto:<br>
-${rec.aberto}<br><br>
-
-🏢 Espaço com divisões:<br>
-${rec.divisoes}<br><br>
-
-🧱 Fluxo de ar difícil:<br>
-${rec.fluxo}<br><br>
-`;
+  // 🧠 RENDER CENTRALIZADO
+  renderResultado(btuTotal, pessoas);
 
   // 💾 SALVAR
+  let rec = recomendacaoFinal(btuTotal);
+
   salvarCalculo({
     data: new Date().toLocaleString(),
     nome: nomeAmbiente,
@@ -149,22 +99,26 @@ ${rec.fluxo}<br><br>
     sol,
     forro,
     btu: btuTotal,
-    distribuicao: {
+    distribuicao: rec.tipo === "distribuicao" ? {
       aberto: rec.aberto,
       divisoes: rec.divisoes,
       fluxo: rec.fluxo
-    }
+    } : null
   });
 
-indexEditando = null; 
-modoVisualizacao = false;
+  // 🔄 RESET ESTADO
+  indexEditando = null;
+  modoVisualizacao = false;
 
-carregarHistorico();
+  carregarHistorico();
 
-//limpa o formulario
-document.querySelectorAll("select").forEach(s => s.value = "");
-let btn = document.getElementById("btnCalcular");
-btn.innerHTML = "Calcular";
+  setTimeout(() => {
+    limparFormulario();
+  }, 100);
+ 
+  // 🔘 RESET BOTÃO
+  let btn = document.getElementById("btnCalcular");
+  btn.innerText = "Calcular";
 }
 
 // 🔧 PARSE
@@ -198,24 +152,156 @@ function classificarProjeto(btuTotal, pessoas) {
   };
 }
 
-function combinarBTU(btu) {
-  let capacidades = [60000, 48000, 36000, 24000, 18000, 12000, 9000];
-  let resultado = [];
+function renderResultado(btuTotal, pessoas) {
+  let projeto = classificarProjeto(btuTotal, pessoas);
+  let diagnostico = diagnosticoSistema(btuTotal);
+  let rec = recomendacaoFinal(btuTotal);
 
-  for (let cap of capacidades) {
-    while (btu >= cap * 0.9) {
-      resultado.push(cap);
-      btu -= cap;
+  let recomendacaoDiv = document.getElementById("recomendacao");
+  let distribuicaoDiv = document.getElementById("distribuicao");
+  let boxDistribuicao = document.getElementById("boxDistribuicao"); // 🔥 DIV PAI
+
+  let recomendacaoHTML = "";
+
+  // 🧹 LIMPA antes de renderizar
+  recomendacaoDiv.innerHTML = "";
+  distribuicaoDiv.innerHTML = "";
+
+  // 🔹 CASO SIMPLES
+  if (rec.tipo === "simples") {
+
+    recomendacaoHTML = `
+      🔧 <strong>Recomendado:</strong><br>
+      ${rec.texto}<br><br>
+    `;
+
+    // 🔴 ESCONDE A BOX INTEIRA
+    if (boxDistribuicao) {
+      boxDistribuicao.style.display = "none";
     }
   }
 
-  if (btu > 0) resultado.push(9000);
+  // 🔹 CASO DISTRIBUIÇÃO
+  if (rec.tipo === "distribuicao") {
 
-  return resultado.map(v => v.toLocaleString("pt-BR")).join(" + ");
+    // 🟢 MOSTRA A BOX INTEIRA
+    if (boxDistribuicao) {
+      boxDistribuicao.style.display = "block";
+    }
+
+    distribuicaoDiv.innerHTML = `
+      📌 <strong>Cálculo total:</strong> ${btuTotal.toLocaleString("pt-BR")} BTU<br><br>
+
+      🌬️ <strong>Espaço aberto:</strong><br>
+      ${rec.aberto}<br><br>
+
+      🏢 <strong>Espaço com divisões:</strong><br>
+      ${rec.divisoes}<br><br>
+
+      🧱 <strong>Fluxo de ar difícil:</strong><br>
+      ${rec.fluxo}<br><br>
+    `;
+  }
+
+  // 🧠 BLOCO PRINCIPAL
+  recomendacaoDiv.innerHTML = `
+    <strong>Classificação:</strong> ${projeto.tipo}<br>
+    <strong>Nível técnico:</strong> ${projeto.nivel}<br><br>
+
+    ${recomendacaoHTML}
+
+    📊 <strong>Nível do projeto:</strong><br>
+    <span style="color:${diagnostico.cor}; font-weight:bold;">
+      ${diagnostico.nivel}
+    </span><br>
+
+    🏗️ <strong>Sistema recomendado:</strong><br>
+    ${diagnostico.sistema}<br><br>
+
+    ${diagnostico.alerta ? `⚠️ ${diagnostico.alerta}<br><br>` : ""}
+
+    ${projeto.alerta ? `⚠️ ${projeto.alerta}<br>` : ""}
+  `;
 }
 
+function controlarDistribuicao(rec, btuTotal) {
+  let div = document.getElementById("distribuicao");
+
+  if (!div) return;
+
+  if (rec.tipo === "simples") {
+    div.style.display = "none";
+    div.innerHTML = "";
+  } else {
+    div.style.display = "block";
+
+    div.innerHTML = `
+      📌 <strong>Cálculo total:</strong> ${btuTotal.toLocaleString("pt-BR")} BTU<br><br>
+
+      🌬️ <strong>Espaço aberto:</strong><br>
+      ${rec.aberto}<br><br>
+
+      🏢 <strong>Espaço com divisões:</strong><br>
+      ${rec.divisoes}<br><br>
+
+      🧱 <strong>Fluxo difícil:</strong><br>
+      ${rec.fluxo}<br><br>
+    `;
+  }
+}
+
+function combinarBTU(btu) {
+  let capacidades = [60000, 48000, 36000, 30000, 24000, 18000, 12000, 9000];
+  let contagem = {};
+
+  // inicia contagem
+  capacidades.forEach(cap => contagem[cap] = 0);
+
+  for (let cap of capacidades) {
+    let qtd = Math.floor(btu / cap);
+
+    if (qtd > 0) {
+      contagem[cap] += qtd;
+      btu -= qtd * cap;
+    }
+  }
+
+  // sobra → vira 9k
+  if (btu > 0) {
+    contagem[9000] += 1;
+  }
+
+  // monta resultado final agrupado
+  let resultado = [];
+
+  for (let cap of capacidades) {
+    let qtd = contagem[cap];
+
+    if (qtd > 0) {
+      resultado.push(`${qtd} aparelho(s) de ${cap.toLocaleString("pt-BR")} BTUS`);
+    }
+  }
+
+  return resultado.join(" + ");
+};
+
 function recomendacaoFinal(btuTotal) {
+
+  if (btuTotal <= 12000) {
+    return { tipo: "simples", texto: "1 aparelho de 12.000 BTUS" };
+  }
+
+  if (btuTotal <= 18000) {
+    return { tipo: "simples", texto: "1 aparelho de 18.000 BTUS" };
+  }
+
+  if (btuTotal <= 24000) {
+    return { tipo: "simples", texto: "1 aparelho de 24.000 BTUS" };
+  }
+
+  // 🔵 MÉDIO / GRANDE → DISTRIBUIÇÃO
   return {
+    tipo: "distribuicao",
     aberto: combinarBTU(btuTotal),
     divisoes: combinarBTU(btuTotal * 1.2),
     fluxo: combinarBTU(btuTotal * 1.4)
@@ -262,6 +348,7 @@ function verItem(index) {
 
   let btn = document.getElementById("btnCalcular");
   btn.innerText = "Voltar";
+
   let historico = JSON.parse(localStorage.getItem("historicoBTU")) || [];
   let item = historico[index];
 
@@ -284,53 +371,22 @@ function verItem(index) {
   document.getElementById("sol").value = item.sol;
   document.getElementById("forro").value = item.forro;
 
-  // 🔵 Ativar modo visualização
+  // 🔒 Travar formulário
   travarFormulario(true);
 
-  // Resultado
+  let btuTotal = item.btu;
+
+  // 📊 RESULTADO (DIV 1 - topo)
   document.getElementById("resultado").innerHTML =
     `📍 <strong>${item.nome}</strong><br>
-     🔥 <strong>${item.btu.toLocaleString("pt-BR")} BTU</strong>`;
-     let btuTotal = item.btu;
+     🔥 <strong>${btuTotal.toLocaleString("pt-BR")} BTU</strong>`;
 
-     let projeto = classificarProjeto(btuTotal, item.pessoas);
-     let diagnostico = diagnosticoSistema(btuTotal);
-     let rec = recomendacaoFinal(btuTotal);
-     
-     document.getElementById("recomendacao").innerHTML =
-     `
-     <strong>Classificação:</strong> ${projeto.tipo}<br>
-     <strong>Nível técnico:</strong> ${projeto.nivel}<br><br>
-     
-     📊 <strong>Nível do projeto:</strong><br>
-     <span style="color:${diagnostico.cor}; font-weight:bold;">
-       ${diagnostico.nivel}
-     </span><br>
-     
-     🏗️ <strong>Sistema recomendado:</strong><br>
-     ${diagnostico.sistema}<br><br>
-     
-     ${diagnostico.alerta ? `⚠️ ${diagnostico.alerta}<br><br>` : ""}
-     
-     📌 Cálculo total: ${btuTotal.toLocaleString("pt-BR")} BTU<br><br>
-     
-     🌬️ Espaço aberto (melhor circulação de ar):<br>
-     ${rec.aberto}<br><br>
-     
-     🏢 Espaço com divisões:<br>
-     ${rec.divisoes}<br><br>
-     
-     🧱 Espaço com muita dificuldade no fluxo de ar:<br>
-     ${rec.fluxo}<br><br>
-     
-     ${projeto.alerta ? `⚠️ ${projeto.alerta}<br>` : ""}
-     
-     ${btuTotal > 250000 ? `
-     🚫 <strong>Atenção crítica:</strong><br>
-     Este projeto excede o uso recomendado de ar split.<br>
-     Utilize sistema central (VRF / Chiller).
-     ` : ""}
-     `;
+  // 🔥 CHAMA O MOTOR CENTRAL (SEM DUPLICAR LÓGICA)
+  renderResultado(btuTotal, item.pessoas);
+
+  // 📌 GARANTIA EXTRA (evita lixo antigo se histórico antigo não tiver distribuição)
+  let rec = recomendacaoFinal(btuTotal);
+  controlarDistribuicao(rec, btuTotal);
 
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
@@ -360,11 +416,16 @@ let modoVisualizacao = false;
 function acaoBotao(){
   if (modoVisualizacao){
      voltarParaCalculo();
-     document.querySelectorAll("input").forEach(i => i.value = "");
+ 
   }
   else {
     calcularBTU();
   }
+}
+
+function limparFormulario(){
+  document.querySelectorAll("input").forEach(i => i.value = "");
+  document.querySelectorAll("select").forEach(s => s.value = "");
 }
 
 function voltarParaCalculo(){
@@ -375,6 +436,7 @@ function voltarParaCalculo(){
 
     document.getElementById("resultado").innerHTML = "";
     document.getElementById("recomendacao").innerHTML = "";
+    document.getElementById("distribuicao").innerHTML = "";
     travarFormulario(false);
     let btn =  document.getElementById("btnCalcular");
     btn.innerText = "Calcular"
@@ -384,7 +446,7 @@ function editarItem(index) {
   let historico = JSON.parse(localStorage.getItem("historicoBTU")) || [];
   let item = historico[index];
   let btn = document.getElementById("btnCalcular");
-  btn.innerHTML = "Atualizar";
+  btn.innerText = "Atualizar";
 
   document.getElementById("nomeAmbiente").value = item.nome;
   document.getElementById("largura").value = item.largura;
@@ -411,42 +473,55 @@ function carregarHistorico() {
   let historico = JSON.parse(localStorage.getItem("historicoBTU")) || [];
   let html = "<h3>Histórico</h3>";
 
-  historico.forEach((item, index) => {
-    if (!item || !item.nome) return;
-    html += `
-      <div style="background:#fff; padding:12px; margin-top:10px; border-radius:10px; display:flex; justify-content:space-between; gap:10px; align-items:center;">
-        
-        <div style="flex:1;">
-          <strong>${item.nome}</strong><br>
-          <strong>${item.btu.toLocaleString("pt-BR")} BTU</strong><br>
-          <small>${item.data}</small><br>
-          <div style="color:#22c55e; margin-top:6px;">
-            🌬️ Aberto: ${item.distribuicao?.aberto}<br>
-            🏢 Divisões: ${item.distribuicao?.divisoes}<br>
-            🧱 Fluxo: ${item.distribuicao?.fluxo}
+  historico
+    .map((item, index) => ({ item, index })) // preserva índice original
+    .reverse() // mais recente primeiro
+    .forEach(({ item, index }) => {
+
+      if (!item || !item.nome) return;
+
+      html += `
+        <div style="background:#fff; padding:12px; margin-top:10px; border-radius:10px; display:flex; justify-content:space-between; gap:10px; align-items:center;">
+          
+          <div style="flex:1;">
+            <strong>${item.nome}</strong><br>
+            <strong>${item.btu.toLocaleString("pt-BR")} BTU</strong><br>
+            <small>${item.data}</small><br>
+
+            ${
+              item.distribuicao ? `
+              <div style="color:#2563eb; margin-top:6px;">
+                🔧 Projeto com distribuição
+              </div>
+              ` : `
+              <div style="color:#2563eb; margin-top:6px;">
+                🔧 Projeto simples (sem necessidade de distribuição)
+              </div>
+              `
+            }
+
           </div>
+
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <button onclick="verItem(${index})"
+              style="background:#2563eb;color:white;border:none;padding:6px 10px;border-radius:6px;cursor:pointer;font-size:12px;">
+              Ver
+            </button>
+
+            <button onclick="editarItem(${index})"
+              style="background:#f59e0b;color:white;border:none;padding:6px 10px;border-radius:6px;cursor:pointer;font-size:12px;">
+              Editar
+            </button>
+
+            <button onclick="excluirItem(${index})"
+              style="background:red;color:white;border:none;padding:6px 10px;border-radius:6px;cursor:pointer;font-size:12px;">
+              Excluir
+            </button>
+          </div>
+
         </div>
-
-        <div style="display:flex; flex-direction:column; gap:6px;">
-          <button onclick="verItem(${index})"
-            style="background:#2563eb;color:white;border:none;padding:6px 10px;border-radius:6px;cursor:pointer;font-size:12px;">
-            Ver
-          </button>
-
-          <button onclick="editarItem(${index})"
-            style="background:#f59e0b;color:white;border:none;padding:6px 10px;border-radius:6px;cursor:pointer;font-size:12px;">
-            Editar
-          </button>
-
-          <button onclick="excluirItem(${index})"
-            style="background:red;color:white;border:none;padding:6px 10px;border-radius:6px;cursor:pointer;font-size:12px;">
-            Excluir
-          </button>
-        </div>
-
-      </div>
-    `;
-  });
+      `;
+    });
 
   document.getElementById("historico").innerHTML = html;
 }
