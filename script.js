@@ -195,10 +195,10 @@ function renderResultado(btuTotal, pessoas) {
       🌬️ <strong>Espaço aberto:</strong><br>
       ${rec.aberto}<br><br>
 
-      🏢 <strong>Espaço com divisões:</strong><br>
+      🏢 <strong>Média dificuldade de circulação:</strong><br>
       ${rec.divisoes}<br><br>
 
-      🧱 <strong>Fluxo de ar difícil:</strong><br>
+      🧱 <strong>Grande dificuldade de circulação:</strong><br>
       ${rec.fluxo}<br><br>
     `;
   }
@@ -241,10 +241,10 @@ function controlarDistribuicao(rec, btuTotal) {
       🌬️ <strong>Espaço aberto:</strong><br>
       ${rec.aberto}<br><br>
 
-      🏢 <strong>Espaço com divisões:</strong><br>
+      🏢 <strong>Média dificuldade de circulação:</strong><br>
       ${rec.divisoes}<br><br>
 
-      🧱 <strong>Fluxo difícil:</strong><br>
+      🧱 <strong>Grande dificuldade de circulação:</strong><br>
       ${rec.fluxo}<br><br>
     `;
   }
@@ -282,29 +282,54 @@ function combinarBTU(btu) {
     }
   }
 
-  return resultado.join(" + ");
+  return "🔹 " + resultado.join("<br>🔹 ");
 };
 
 function recomendacaoFinal(btuTotal) {
 
-  if (btuTotal <= 12000) {
-    return { tipo: "simples", texto: "1 aparelho de 12.000 BTUS" };
+  // 🔹 simples
+  if (btuTotal <= 12000) return { tipo: "simples", texto: "1 aparelho de 12.000 BTUS" };
+  if (btuTotal <= 18000) return { tipo: "simples", texto: "1 aparelho de 18.000 BTUS" };
+  if (btuTotal <= 24000) return { tipo: "simples", texto: "1 aparelho de 24.000 BTUS" };
+
+  // 🎯 fator + teto por faixa
+  function calcularExtra(base, fator, capMax) {
+    let extra = base * (fator - 1);
+    if (extra > capMax) extra = capMax; // 🔥 trava de segurança
+    return base + extra;
   }
 
-  if (btuTotal <= 18000) {
-    return { tipo: "simples", texto: "1 aparelho de 18.000 BTUS" };
+  let fatorDiv = 1.15;
+  let fatorFluxo = 1.25;
+  let capDiv = 12000;
+  let capFluxo = 18000;
+
+  if (btuTotal > 60000) {
+    fatorDiv = 1.12;
+    fatorFluxo = 1.20;
+    capDiv = 10000;
+    capFluxo = 15000;
   }
 
-  if (btuTotal <= 24000) {
-    return { tipo: "simples", texto: "1 aparelho de 24.000 BTUS" };
+  if (btuTotal > 100000) {
+    fatorDiv = 1.08;
+    fatorFluxo = 1.15;
+    capDiv = 8000;
+    capFluxo = 12000;
   }
 
-  // 🔵 MÉDIO / GRANDE → DISTRIBUIÇÃO
+  if (btuTotal > 180000) {
+    fatorDiv = 1.05;
+    fatorFluxo = 1.10;
+    capDiv = 6000;
+    capFluxo = 10000;
+  }
+
   return {
     tipo: "distribuicao",
     aberto: combinarBTU(btuTotal),
-    divisoes: combinarBTU(btuTotal * 1.2),
-    fluxo: combinarBTU(btuTotal * 1.4)
+    divisoes: combinarBTU(calcularExtra(btuTotal, fatorDiv, capDiv)),
+    fluxo: combinarBTU(calcularExtra(btuTotal, fatorFluxo, capFluxo))
   };
 }
 
