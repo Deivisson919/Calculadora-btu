@@ -190,17 +190,20 @@ function renderResultado(btuTotal, pessoas) {
     }
 
     distribuicaoDiv.innerHTML = `
-      📌 <strong>Cálculo total:</strong> ${btuTotal.toLocaleString("pt-BR")} BTU<br><br>
+  📌 <strong>Cálculo total:</strong> ${btuTotal.toLocaleString("pt-BR")} BTU<br><br>
 
-      🌬️ <strong>Espaço aberto:</strong><br>
-      ${rec.aberto}<br><br>
+  🌬️ <strong>Espaço aberto:</strong><br>
+  ${rec.aberto.texto}<br><br>
+  <strong>Capacidade do sistema:</strong> ${rec.aberto.total.toLocaleString("pt-BR")} BTUs<br><br>
 
-      🏢 <strong>Média dificuldade de circulação:</strong><br>
-      ${rec.divisoes}<br><br>
+  🏢 <strong>Média dificuldade de circulação:</strong><br>
+  ${rec.divisoes.texto}<br><br>
+  <strong>Capacidade do sistema:</strong> ${rec.divisoes.total.toLocaleString("pt-BR")} BTUs<br><br>
 
-      🧱 <strong>Grande dificuldade de circulação:</strong><br>
-      ${rec.fluxo}<br><br>
-    `;
+  🧱 <strong>Grande dificuldade de circulação:</strong><br>
+  ${rec.fluxo.texto}<br><br>
+  <strong>Capacidade do sistema:</strong> ${rec.fluxo.total.toLocaleString("pt-BR")} BTUs<br><br>
+`;
   }
 
   // 🧠 BLOCO PRINCIPAL
@@ -224,66 +227,61 @@ function renderResultado(btuTotal, pessoas) {
   `;
 }
 
-function controlarDistribuicao(rec, btuTotal) {
-  let div = document.getElementById("distribuicao");
+function combinarBTU(btu, modo = "normal") {
 
-  if (!div) return;
+  // 🎯 estratégia por cenário
+  let capacidades;
 
-  if (rec.tipo === "simples") {
-    div.style.display = "none";
-    div.innerHTML = "";
-  } else {
-    div.style.display = "block";
-
-    div.innerHTML = `
-      📌 <strong>Cálculo total:</strong> ${btuTotal.toLocaleString("pt-BR")} BTU<br><br>
-
-      🌬️ <strong>Espaço aberto:</strong><br>
-      ${rec.aberto}<br><br>
-
-      🏢 <strong>Média dificuldade de circulação:</strong><br>
-      ${rec.divisoes}<br><br>
-
-      🧱 <strong>Grande dificuldade de circulação:</strong><br>
-      ${rec.fluxo}<br><br>
-    `;
+  if (modo === "media") {
+    // reduz máquinas muito grandes → força mais unidades
+    capacidades = [36000, 30000, 24000, 18000, 12000, 9000];
+  } 
+  else if (modo === "dificil") {
+    // prioriza máquinas grandes → maior impacto
+    capacidades = [60000, 48000, 36000, 30000, 24000, 18000, 12000, 9000];
+  } 
+  else {
+    // padrão (equilíbrio)
+    capacidades = [48000, 36000, 30000, 24000, 18000, 12000, 9000];
   }
-}
 
-function combinarBTU(btu) {
-  let capacidades = [60000, 48000, 36000, 30000, 24000, 18000, 12000, 9000];
   let contagem = {};
-
-  // inicia contagem
   capacidades.forEach(cap => contagem[cap] = 0);
 
+  let restante = btu;
+
   for (let cap of capacidades) {
-    let qtd = Math.floor(btu / cap);
+    let qtd = Math.floor(restante / cap);
 
     if (qtd > 0) {
       contagem[cap] += qtd;
-      btu -= qtd * cap;
+      restante -= qtd * cap;
     }
   }
 
-  // sobra → vira 9k
-  if (btu > 0) {
-    contagem[9000] += 1;
+  // 🔧 ajuste final → nunca deixa faltar capacidade
+  if (restante > 0) {
+    contagem[9000] += Math.ceil(restante / 9000);
   }
 
-  // monta resultado final agrupado
+  // 📊 monta saída
   let resultado = [];
+  let total = 0;
 
   for (let cap of capacidades) {
     let qtd = contagem[cap];
 
     if (qtd > 0) {
       resultado.push(`${qtd} aparelho(s) de ${cap.toLocaleString("pt-BR")} BTUS`);
+      total += qtd * cap;
     }
   }
 
-  return "🔹 " + resultado.join("<br>🔹 ");
-};
+  return {
+    texto: "🔹 " + resultado.join("<br>🔹 "),
+    total: total
+  };
+}
 
 function recomendacaoFinal(btuTotal) {
 
@@ -295,8 +293,17 @@ function recomendacaoFinal(btuTotal) {
   // 🎯 fator + teto por faixa
   function calcularExtra(base, fator, capMax) {
     let extra = base * (fator - 1);
-    if (extra > capMax) extra = capMax; // 🔥 trava de segurança
-    return base + extra;
+
+    if (extra > capMax) extra = capMax;
+
+    let resultado = base + extra;
+
+    // 🔥 garante diferença mínima
+    if (resultado <= base + 3000) {
+      resultado = base + 3000;
+    }
+
+    return Math.ceil(resultado);
   }
 
   let fatorDiv = 1.15;
@@ -325,11 +332,31 @@ function recomendacaoFinal(btuTotal) {
     capFluxo = 10000;
   }
 
+  // 🔹 base
+  let aberto = combinarBTU(btuTotal);
+
+  let btuDivisoes = calcularExtra(btuTotal, fatorDiv, capDiv);
+  let divisoes = combinarBTU(btuDivisoes);
+
+  let btuFluxo = calcularExtra(btuTotal, fatorFluxo, capFluxo);
+  let fluxo = combinarBTU(btuFluxo);
+
+  // 🔥 CORREÇÃO REAL (comparação correta por TOTAL)
+  if (divisoes.total <= aberto.total) {
+    btuDivisoes = aberto.total + 9000;
+    divisoes = combinarBTU(btuDivisoes);
+  }
+
+  if (fluxo.total <= divisoes.total) {
+    btuFluxo = divisoes.total + 9000;
+    fluxo = combinarBTU(btuFluxo);
+  }
+
   return {
     tipo: "distribuicao",
-    aberto: combinarBTU(btuTotal),
-    divisoes: combinarBTU(calcularExtra(btuTotal, fatorDiv, capDiv)),
-    fluxo: combinarBTU(calcularExtra(btuTotal, fatorFluxo, capFluxo))
+    aberto,
+    divisoes,
+    fluxo
   };
 }
 
