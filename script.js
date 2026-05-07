@@ -1,5 +1,6 @@
 let indexEditando = null;
 const capacidades = [9000, 12000, 18000, 24000, 30000, 36000, 48000, 60000];
+const LIMITE_DISTRIBUICAO = 180000;
 
 //  CALCULAR
 function calcularBTU() {
@@ -77,7 +78,7 @@ function calcularBTU() {
   // 📊 RESULTADO 
   document.getElementById("resultado").innerHTML =
     `📍 <strong>${nomeAmbiente}</strong><br>
-     🔥 <strong>${btuTotal.toLocaleString("pt-BR")} BTU</strong>`;
+     🔥 <strong>${btuTotal.toLocaleString("pt-BR")} BTUs</strong>`;
 
   // 🧠 RENDER CENTRALIZADO
   renderResultado(btuTotal, pessoas);
@@ -152,18 +153,20 @@ function classificarProjeto(btuTotal, pessoas) {
   };
 }
 
-function renderResultado(btuTotal, pessoas) {
+function renderResultado(btuTotal, pessoas, area = 0) {
+
   let projeto = classificarProjeto(btuTotal, pessoas);
   let diagnostico = diagnosticoSistema(btuTotal);
+  let sistema = definirSistema(btuTotal, pessoas, area);
   let rec = recomendacaoFinal(btuTotal);
 
   let recomendacaoDiv = document.getElementById("recomendacao");
   let distribuicaoDiv = document.getElementById("distribuicao");
-  let boxDistribuicao = document.getElementById("boxDistribuicao"); // 🔥 DIV PAI
+  let boxDistribuicao = document.getElementById("boxDistribuicao");
 
   let recomendacaoHTML = "";
 
-  // 🧹 LIMPA antes de renderizar
+  // 🧹 limpa antes de renderizar
   recomendacaoDiv.innerHTML = "";
   distribuicaoDiv.innerHTML = "";
 
@@ -175,181 +178,283 @@ function renderResultado(btuTotal, pessoas) {
       ${rec.texto}<br><br>
     `;
 
-    // 🔴 ESCONDE A BOX INTEIRA
+    // 🔴 esconde box distribuição
     if (boxDistribuicao) {
       boxDistribuicao.style.display = "none";
     }
   }
 
+  // 🔹 CASO LIMITE HVAC
+  if (rec.tipo === "limite") {
+
+    // 🔴 esconde distribuição
+    if (boxDistribuicao) {
+      boxDistribuicao.style.display = "none";
+    }
+
+    recomendacaoHTML = `
+      ⚠️ <strong>Projeto HVAC de grande porte</strong><br><br>
+
+      ${rec.alerta}<br><br>
+
+      🔧 <strong>Sistema recomendado:</strong><br>
+      ${rec.sistema}<br><br>
+    `;
+  }
+
   // 🔹 CASO DISTRIBUIÇÃO
   if (rec.tipo === "distribuicao") {
 
-    // 🟢 MOSTRA A BOX INTEIRA
+    // 🟢 mostra distribuição
     if (boxDistribuicao) {
       boxDistribuicao.style.display = "block";
     }
 
     distribuicaoDiv.innerHTML = `
-  📌 <strong>Cálculo total:</strong> ${btuTotal.toLocaleString("pt-BR")} BTU<br><br>
+      📌 <strong>Cálculo total:</strong>
+      ${btuTotal.toLocaleString("pt-BR")} BTUs<br><br>
 
-  🌬️ <strong>Espaço aberto:</strong><br>
-  ${rec.aberto.texto}<br><br>
-  <strong>Capacidade do sistema:</strong> ${rec.aberto.total.toLocaleString("pt-BR")} BTUs<br><br>
+      🌬️ <strong>Espaço aberto:</strong><br>
+      ${rec.aberto.texto}<br><br>
 
-  🏢 <strong>Média dificuldade de circulação:</strong><br>
-  ${rec.divisoes.texto}<br><br>
-  <strong>Capacidade do sistema:</strong> ${rec.divisoes.total.toLocaleString("pt-BR")} BTUs<br><br>
+      <strong>Capacidade do sistema:</strong>
+      ${rec.aberto.total.toLocaleString("pt-BR")} BTUs<br><br>
 
-  🧱 <strong>Grande dificuldade de circulação:</strong><br>
-  ${rec.fluxo.texto}<br><br>
-  <strong>Capacidade do sistema:</strong> ${rec.fluxo.total.toLocaleString("pt-BR")} BTUs<br><br>
-`;
+      🏢 <strong>Média dificuldade de circulação:</strong><br>
+      ${rec.divisoes.texto}<br><br>
+
+      <strong>Capacidade do sistema:</strong>
+      ${rec.divisoes.total.toLocaleString("pt-BR")} BTUs<br><br>
+
+      🧱 <strong>Grande dificuldade de circulação:</strong><br>
+      ${rec.fluxo.texto}<br><br>
+
+      <strong>Capacidade do sistema:</strong>
+      ${rec.fluxo.total.toLocaleString("pt-BR")} BTUs<br><br>
+    `;
   }
 
   // 🧠 BLOCO PRINCIPAL
   recomendacaoDiv.innerHTML = `
-    <strong>Classificação:</strong> ${projeto.tipo}<br>
-    <strong>Nível técnico:</strong> ${projeto.nivel}<br><br>
+
+    📊 <strong>Classificação:</strong><br>
+    ${projeto.tipo}<br><br>
+
+    🧠 <strong>Nível técnico:</strong><br>
+    ${projeto.nivel}<br><br>
 
     ${recomendacaoHTML}
 
-    📊 <strong>Nível do projeto:</strong><br>
+    📈 <strong>Nível do projeto:</strong><br>
     <span style="color:${diagnostico.cor}; font-weight:bold;">
       ${diagnostico.nivel}
-    </span><br>
+    </span><br><br>
 
     🏗️ <strong>Sistema recomendado:</strong><br>
-    ${diagnostico.sistema}<br><br>
+    ${sistema.sistema}<br><br>
 
-    ${diagnostico.alerta ? `⚠️ ${diagnostico.alerta}<br><br>` : ""}
+    🏢 <strong>Categoria do projeto:</strong><br>
+    ${sistema.categoria}<br><br>
 
-    ${projeto.alerta ? `⚠️ ${projeto.alerta}<br>` : ""}
+    📝 <strong>Análise técnica:</strong><br>
+    ${sistema.observacao}<br><br>
+
+    ${diagnostico.alerta ? `
+      ⚠️ ${diagnostico.alerta}<br><br>
+    ` : ""}
+
+    ${projeto.alerta ? `
+      ⚠️ ${projeto.alerta}<br><br>
+    ` : ""}
   `;
 }
 
 function combinarBTU(btu, modo = "normal") {
 
-  // 🎯 estratégia por cenário
-  let capacidades;
+  let capacidadesModo;
 
   if (modo === "media") {
-    // reduz máquinas muito grandes → força mais unidades
-    capacidades = [36000, 30000, 24000, 18000, 12000, 9000];
+    capacidadesModo = [36000, 30000, 24000, 18000, 12000, 9000];
   } 
   else if (modo === "dificil") {
-    // prioriza máquinas grandes → maior impacto
-    capacidades = [60000, 48000, 36000, 30000, 24000, 18000, 12000, 9000];
+    capacidadesModo = [60000, 48000, 36000, 30000, 24000, 18000, 12000, 9000];
   } 
   else {
-    // padrão (equilíbrio)
-    capacidades = [48000, 36000, 30000, 24000, 18000, 12000, 9000];
+    capacidadesModo = [48000, 36000, 30000, 24000, 18000, 12000, 9000];
   }
 
-  let contagem = {};
-  capacidades.forEach(cap => contagem[cap] = 0);
+  let melhor = null;
 
-  let restante = btu;
+  // 🔥 testa combinações inteligentes
+  for (let a of capacidadesModo) {
+    for (let b of [0, ...capacidadesModo]) {
+      for (let c of [0, ...capacidadesModo]) {
+        for (let d of [0, ...capacidadesModo]) {
 
-  for (let cap of capacidades) {
-    let qtd = Math.floor(restante / cap);
+          let lista = [a, b, c, d].filter(x => x > 0);
 
-    if (qtd > 0) {
-      contagem[cap] += qtd;
-      restante -= qtd * cap;
+          let total = lista.reduce((soma, v) => soma + v, 0);
+
+          // precisa atingir o BTU mínimo
+          if (total < btu) continue;
+
+          let sobra = total - btu;
+
+          // quantidade de aparelhos
+          let qtd = lista.length;
+
+          // 🔥 score principal
+          let score = sobra + (qtd * 2000);
+
+          // penaliza excesso de aparelhos
+          if (qtd >= 4) {
+            score += 4000;
+          }
+
+          // penaliza distribuição desbalanceada
+          let maior = Math.max(...lista);
+          let menor = Math.min(...lista);
+
+          if ((maior - menor) >= 40000) {
+            score += 5000;
+          }
+
+          // evita muitos aparelhos pequenos
+          let pequenos = lista.filter(x => x <= 12000).length;
+
+          if (pequenos >= 2) {
+            score += 3000;
+          }
+
+          // prioriza combinações comerciais limpas
+          let unicos = [...new Set(lista)];
+
+          if (unicos.length === 1 && qtd >= 2) {
+            score -= 1500;
+          }
+
+          if (!melhor || score < melhor.score) {
+
+            melhor = {
+              lista,
+              total,
+              sobra,
+              score
+            };
+
+          }
+        }
+      }
     }
   }
 
-  // 🔧 ajuste final → nunca deixa faltar capacidade
-  if (restante > 0) {
-    contagem[9000] += Math.ceil(restante / 9000);
+  // 🔒 fallback
+  if (!melhor) {
+    return {
+      texto: "⚠️ Não foi possível gerar distribuição.",
+      total: 0
+    };
   }
 
-  // 📊 monta saída
+  // 📊 agrupar aparelhos iguais
+  let agrupado = {};
+
+  melhor.lista.forEach(cap => {
+    agrupado[cap] = (agrupado[cap] || 0) + 1;
+  });
+
   let resultado = [];
-  let total = 0;
 
-  for (let cap of capacidades) {
-    let qtd = contagem[cap];
+  Object.keys(agrupado)
+    .sort((a, b) => b - a)
+    .forEach(cap => {
 
-    if (qtd > 0) {
-      resultado.push(`${qtd} aparelho(s) de ${cap.toLocaleString("pt-BR")} BTUS`);
-      total += qtd * cap;
-    }
-  }
+      resultado.push(
+        `${agrupado[cap]} aparelho(s) de ${Number(cap).toLocaleString("pt-BR")} BTUS`
+      );
+
+    });
 
   return {
     texto: "🔹 " + resultado.join("<br>🔹 "),
-    total: total
+    total: melhor.total
   };
 }
 
 function recomendacaoFinal(btuTotal) {
 
-  // 🔹 simples
-  if (btuTotal <= 12000) return { tipo: "simples", texto: "1 aparelho de 12.000 BTUS" };
-  if (btuTotal <= 18000) return { tipo: "simples", texto: "1 aparelho de 18.000 BTUS" };
-  if (btuTotal <= 24000) return { tipo: "simples", texto: "1 aparelho de 24.000 BTUS" };
+  if (btuTotal > LIMITE_DISTRIBUICAO) {
+    return {
+      tipo: "limite",
+      alerta: "Projeto acima do limite da distribuição automática.",
+      sistema: "VRF / Sistema Central"
+    };
+  }
 
-  // 🎯 fator + teto por faixa
-  function calcularExtra(base, fator, capMax) {
+  // 🔹 recomendações simples
+  if (btuTotal <= 12000) {
+    return {
+      tipo: "simples",
+      texto: "1 aparelho de 12.000 BTUS"
+    };
+  }
+
+  if (btuTotal <= 18000) {
+    return {
+      tipo: "simples",
+      texto: "1 aparelho de 18.000 BTUS"
+    };
+  }
+
+  if (btuTotal <= 24000) {
+    return {
+      tipo: "simples",
+      texto: "1 aparelho de 24.000 BTUS"
+    };
+  }
+
+  // 🔥 cálculo inteligente dos cenários
+  function calcularExtra(base, fator, limiteExtra) {
+
     let extra = base * (fator - 1);
 
-    if (extra > capMax) extra = capMax;
+    // limita exagero
+    if (extra > limiteExtra) {
+      extra = limiteExtra;
+    }
 
     let resultado = base + extra;
-
-    // 🔥 garante diferença mínima
-    if (resultado <= base + 3000) {
-      resultado = base + 3000;
-    }
 
     return Math.ceil(resultado);
   }
 
-  let fatorDiv = 1.15;
-  let fatorFluxo = 1.25;
-  let capDiv = 12000;
-  let capFluxo = 18000;
+  // 🌬️ espaço aberto
+  let abertoBTU = btuTotal;
 
-  if (btuTotal > 60000) {
-    fatorDiv = 1.12;
-    fatorFluxo = 1.20;
-    capDiv = 10000;
-    capFluxo = 15000;
-  }
+  // 🏢 média circulação
+  let medioBTU = calcularExtra(btuTotal, 1.10, 10000);
 
-  if (btuTotal > 100000) {
-    fatorDiv = 1.08;
-    fatorFluxo = 1.15;
-    capDiv = 8000;
-    capFluxo = 12000;
-  }
+  // 🧱 circulação difícil
+  let dificilBTU = calcularExtra(btuTotal, 1.18, 16000);
 
-  if (btuTotal > 180000) {
-    fatorDiv = 1.05;
-    fatorFluxo = 1.10;
-    capDiv = 6000;
-    capFluxo = 10000;
-  }
+  // 🔥 distribuição inteligente
+  let aberto = combinarBTU(abertoBTU, "normal");
 
-  // 🔹 base
-  let aberto = combinarBTU(btuTotal);
+  let divisoes = combinarBTU(medioBTU, "media");
 
-  let btuDivisoes = calcularExtra(btuTotal, fatorDiv, capDiv);
-  let divisoes = combinarBTU(btuDivisoes);
+  let fluxo = combinarBTU(dificilBTU, "dificil");
 
-  let btuFluxo = calcularExtra(btuTotal, fatorFluxo, capFluxo);
-  let fluxo = combinarBTU(btuFluxo);
-
-  // 🔥 CORREÇÃO REAL (comparação correta por TOTAL)
+  // 🔒 garante progressão lógica
   if (divisoes.total <= aberto.total) {
-    btuDivisoes = aberto.total + 9000;
-    divisoes = combinarBTU(btuDivisoes);
+
+    divisoes = combinarBTU(aberto.total + 9000, "media");
+
   }
 
   if (fluxo.total <= divisoes.total) {
-    btuFluxo = divisoes.total + 9000;
-    fluxo = combinarBTU(btuFluxo);
+
+    fluxo = combinarBTU(divisoes.total + 9000, "dificil");
+
   }
 
   return {
@@ -357,6 +462,52 @@ function recomendacaoFinal(btuTotal) {
     aberto,
     divisoes,
     fluxo
+  };
+}
+
+function definirSistema(btuTotal, pessoas, area) {
+
+  // 🟢 Residencial
+  if (btuTotal <= 36000) {
+    return {
+      sistema: "Split Hi-Wall",
+      categoria: "Residencial",
+      observacao: "Ideal para ambientes pequenos e médios."
+    };
+  }
+
+  // 🟡 Comercial leve
+  if (btuTotal <= 90000) {
+    return {
+      sistema: "Split Piso Teto ou Cassete",
+      categoria: "Comercial leve",
+      observacao: "Melhor distribuição de ar para ambientes amplos."
+    };
+  }
+
+  // 🟠 Comercial médio
+  if (btuTotal <= 180000) {
+    return {
+      sistema: "Múltiplos Piso Teto / Cassete",
+      categoria: "Comercial médio",
+      observacao: "Recomendado balanceamento por setores."
+    };
+  }
+
+  // 🔴 Comercial pesado
+  if (btuTotal <= 300000) {
+    return {
+      sistema: "VRF ou Dutado",
+      categoria: "Projeto profissional",
+      observacao: "Necessário pré-projeto técnico."
+    };
+  }
+
+  // ⚫ Grande porte
+  return {
+    sistema: "Chiller / Sistema Central",
+    categoria: "Engenharia HVAC",
+    observacao: "Obrigatório projeto especializado."
   };
 }
 
@@ -431,7 +582,7 @@ function verItem(index) {
   // 📊 RESULTADO (DIV 1 - topo)
   document.getElementById("resultado").innerHTML =
     `📍 <strong>${item.nome}</strong><br>
-     🔥 <strong>${btuTotal.toLocaleString("pt-BR")} BTU</strong>`;
+     🔥 <strong>${btuTotal.toLocaleString("pt-BR")} BTUS</strong>`;
 
   // 🔥 CHAMA O MOTOR CENTRAL (SEM DUPLICAR LÓGICA)
   renderResultado(btuTotal, item.pessoas);
@@ -537,7 +688,7 @@ function carregarHistorico() {
           
           <div style="flex:1;">
             <strong>${item.nome}</strong><br>
-            <strong>${item.btu.toLocaleString("pt-BR")} BTU</strong><br>
+            <strong>${item.btu.toLocaleString("pt-BR")} BTUS</strong><br>
             <small>${item.data}</small><br>
 
             ${
