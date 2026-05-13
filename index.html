@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="icon" href="assets/Images/snowflake1.jpg">
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="card">
+
+
+      <div class="logo">
+        <div class="logo-icon"><img src="assets/Images/Ar.png" alt="Logo BTU"></div><!--logo icon-->
+        <h1>BTU<span>Calculator</span></h1>
+      </div><!--logo-->
+
+      <div class="name"><!-- NOME DO AMBIENTE -->
+        <h3>Nome do ambiente:</h3>
+        <input type="text" id="nomeAmbiente" placeholder="Ex: Sala, Quarto, Cozinha">
+      </div>
+
+      <!-- INPUTS -->
+      <div class="grid">
+        <input type="number" id="largura" placeholder="Largura (m)">
+        <input type="number" id="comprimento" placeholder="Comprimento (m)">
+        <input type="number" id="pessoas" placeholder="Quantidade de pessoas">
+        <input type="number" id="eletronicos" placeholder="Eletrônicos">
+        <input type="number" id="portas" placeholder="Portas externas">
+        <input type="number" id="janelas" placeholder="Janelas">
+        <input type="number" id="paredes" placeholder="Paredes no sol">
+      </div>
+
+      <!-- CONFIGURAÇÕES -->
+      <div class="section">
+        <label>Tamanho das janelas</label>
+        <select id="janela">
+          <option value="">Selecione</option>
+          <option value="1">Pequena</option>
+          <option value="2">Média</option>
+          <option value="3">Grande</option>
+        </select>
+      </div>
+
+      <div class="section">
+        <label>Incidência solar</label>
+        <select id="sol">
+          <option value="">Selecione</option>
+          <option value="1">Sol o dia todo</option>
+          <option value="2">Meio período</option>
+          <option value="0">Sem sol</option>
+        </select>
+      </div>
+
+      <div class="section">
+        <label>Teto possui forro?</label>
+        <select id="forro">
+          <option value="">Selecione</option>
+          <option value="1">Não</option>
+          <option value="0">Sim</option>
+        </select>
+      </div>
+
+      <!-- BOTÃO -->
+      <button id="btnCalcular" type="button" onclick="acaoBotao()">Calcular</button>
+
+    </div><!--card-->
+
+    <div class="card">
+
+      <!-- RESULTADO -->
+      <div class="resultado-box">
+
+        <h2>Resultado</h2>
+
+        <p><strong>Carga térmica:</strong></p>
+        <div id="resultado" class="resultado"></div>
+
+        <div class="recomendacao-box">
+          <h3>Recomendação:</h3>
+          <div id="recomendacao"></div>
+        </div>
+        <div id="pdfResultado"></div>
+
+        <div class="distribuicao-box" id="boxDistribuicao" style="display: none;">
+          <h3>Distribuição de ar:</h3>
+          <div id="distribuicao"></div>
+          <div id="pdfDistribuicao"></div>
+        </div>
+      </div>
+
+      <!-- HISTÓRICO -->
+      <div id="historico" class="historico-box">
+        <h2>Histórico</h2>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="pdf" style="display: none;">
+    <div id="pdfArea" style="width:800px; background:white; padding:20px;"></div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <script src="assets/js/pdf.js"></script>
+
+  <script src="assets/js/script.js"></script>
+
+</body>
+
+</html>
