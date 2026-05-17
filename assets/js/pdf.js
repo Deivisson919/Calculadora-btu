@@ -90,198 +90,114 @@ function montarPDF() {
 
   pdfArea.innerHTML = `
 
-    <div style="
-      padding:40px;
-      background:white;
-      color:black;
-      font-family:Arial;
-      width:800px;
-    ">
+  <div class="pdf-page">
+  <div class="pdf-content">
+      <!-- HEADER -->
+      <div class="pdf-header">
 
-      <h1 style="color:#2563eb;">
-        RELATÓRIO TÉCNICO BTU
-      </h1>
+        <!-- ESQUERDA -->
+        <div class="pdf-header-left">
 
-      <hr>
+          <div class="pdf-logo">
+          <img src="assets/Images/logo df ar.png" alt="Calendário">
+          <h1>DF INTELLIGENCE</h1>
+          </div>
 
-      <p>
-        Área:
-        ${area}
-        →
-        +${detalheArea}
-      </p>
+          <div class="pdf-title">
+            <h2>
+              RELATÓRIO<br>
+              TÉCNICO HVAC
+            </h2>
 
-      <p>
-        Pessoas:
-        ${qtdPessoas}
-        →
-        +${detalhePessoas}
-      </p>
+            <span>CÁLCULO DE CARGA TÉRMICA</span>
+          </div>
 
-      <p>
-        Eletrônicos:
-        ${qtdEletronicos}
-        →
-        +${detalheEletronicos}
-      </p>
+        </div>
 
-      <p>
-        Portas:
-        ${qtdPortas}
-        →
-        +${detalhePortas}
-      </p>
+        <!-- DIREITA -->
+        <div class="pdf-side-card">
 
-      <p>
-        Janelas:
-        ${qtdJanelas}
-        →
-        +${detalheJanelas}
-      </p>
+          <div class="side-item">
+              <img src="assets/Images/calendar.png" alt="Calendário">
+                <p>
+                  Data do relatório<br>
+                  ${new Date().toLocaleString()}
+                </p>
+          </div>
 
-      <p>
-        Sol:
-        +${detalheSol}
-      </p>
+          <div class="side-item">
+              <img src="assets/Images/user.png" alt="Usuário">
+                <p>
+                  Responsável Técnico<br>
+                  DF Intelligence
+                </p>
+          </div>
 
-      <p>
-        Forro:
-        +${detalheForro}
-      </p>
+        </div>
 
-      <p>
-        Paredes:
-        ${paredes}
-        →
-        +${detalheParedes}
-      </p>
-
-      <hr>
-
-      <h2>
-        TOTAL:
-        ${resultadoFinal}
-        BTUs
-      </h2>
-
-    </div>
-
-  `;
-
-  console.log(pdfArea.offsetHeight);
-console.log(pdfArea.offsetWidth);
-}
-/*function montarPDF() {
-
-  let pdfArea = document.getElementById("pdfArea");
-
-  pdfArea.innerHTML = `
-
-    <div style="
-      padding:40px;
-      background:white;
-      color:black;
-      font-family:Arial;
-      width:800px;
-    ">
-
-      <h1 style="
-        color:#2563eb;
-        margin-bottom:5px;
-      ">
-        RELATÓRIO TÉCNICO BTU
-      </h1>
-
-      <p style="
-        color:gray;
-        margin-top:0;
-      ">
-        Sistema de cálculo térmico
-      </p>
-
-      <hr style="margin:25px 0;">
-
-      <h2>MEMORIAL DE CÁLCULO</h2>
-
-      <p>
-        Área térmica:
-        ${area}m²
-        →
-        +${detalheArea.toLocaleString("pt-BR")} BTUs
-      </p>
-
-      <p>
-        Pessoas:
-        ${qtdPessoas}
-        →
-        +${detalhePessoas.toLocaleString("pt-BR")} BTUs
-      </p>
-
-      <p>
-        Eletrônicos:
-        ${qtdEletronicos}
-        →
-        +${detalheEletronicos.toLocaleString("pt-BR")} BTUs
-      </p>
-
-      <p>
-        Portas externas:
-        ${qtdPortas}
-        →
-        +${detalhePortas.toLocaleString("pt-BR")} BTUs
-      </p>
-
-      <p>
-        Janelas:
-        ${qtdJanelas}
-        →
-        +${detalheJanelas.toLocaleString("pt-BR")} BTUs
-      </p>
-
-      <p>
-        Incidência solar:
-        →
-        +${detalheSol.toLocaleString("pt-BR")} BTUs
-      </p>
-
-      <p>
-        Forro:
-        →
-        +${detalheForro.toLocaleString("pt-BR")} BTUs
-      </p>
-
-      <p>
-        Paredes solares:
-        ${paredes}
-        →
-        +${detalheParedes.toLocaleString("pt-BR")} BTUs
-      </p>
-
-      <hr style="margin:25px 0;">
-
-      <h2>
-        CARGA TÉRMICA TOTAL
-      </h2>
-
-      <div style="
-        font-size:32px;
-        font-weight:bold;
-        color:#2563eb;
-        margin-top:10px;
-      ">
-        ${resultadoFinal.toLocaleString("pt-BR")} BTUs
       </div>
 
-      <hr style="margin:30px 0;">
+      <!-- INFO -->
+      <div class="pdf-info">
 
-      <p style="
-        color:gray;
-        font-size:12px;
-      ">
-        Relatório gerado automaticamente pelo sistema.
-      </p>
+        <div class="info-item">
+        <img src = "assets/images/cracha.png" alt="Imagem">
+             <div class = "info-texto">
+                  <strong>CLIENTE</strong>
+                  <span>Empresa Exemplo</span>
+              </div>
+        </div>
 
-    </div>
+        <div class="info-item">
+        <img src = "assets/images/project.png" alt="Imagem">
+              <div class = "info-texto">
+                  <strong>PROJETO</strong>
+                  <span>Sala Comercial</span>
+              </div>
+        </div>
+
+      </div>
+
+      <!-- CARD BTU -->
+      <div class="pdf-btu-card">
+
+        <div class="btu-topo">
+
+          <div class="icone-frio">
+            <img src="assets/Images/flocos-de-neve.png" alt="Frio">
+          </div>
+
+          <div class="btu-textos">
+
+            <h3>CARGA TÉRMICA TOTAL:</h3>
+
+            <div class="numero">
+              ${resultadoFinal.toLocaleString("pt-BR")} BTUs
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- RESUMO -->
+      <div class="pdf-resumo">
+
+        <h3>RESUMO DO PROJETO</h3>
+
+        <hr>
+
+        <p>
+          Este relatório apresenta o cálculo de carga térmica
+          para o ambiente mencionado acima, utilizando metodologias
+          baseadas em fatores de carga térmica por área, ocupação,
+          equipamentos, aberturas, insolação e outros critérios técnicos.
+        </p>
+
+      </div>
+  </div>
+</div>
 
   `;
-}*/
+}

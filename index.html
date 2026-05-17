@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Calculadora</title>
   <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/pdf.css">
   <link rel="icon" href="assets/Images/snowflake1.jpg">
 </head>
 
@@ -104,8 +105,24 @@
 
   </div>
 
-  <div class="pdf" style="display: none;">
-    <div id="pdfArea" style="width:800px; background:white; padding:20px;"></div>
+  <div class="pdf" style="display: flex; justify-content: center;">
+    <div id="pdfArea" style="width:800px; background:white; padding:20px;">
+      <div class="pdf-page">
+
+        <div class="pdf-header">
+        </div>
+
+        <div class="pdf-info">
+        </div>
+
+        <div class="pdf-btu-card">
+        </div>
+
+        <div class="pdf-resumo">
+        </div>
+
+      </div>
+    </div>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
