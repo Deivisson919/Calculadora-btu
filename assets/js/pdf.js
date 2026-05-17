@@ -100,7 +100,6 @@ function montarPDF() {
 
           <div class="pdf-logo">
           <img src="assets/Images/logo df ar.png" alt="Calendário">
-          <h1>DF INTELLIGENCE</h1>
           </div>
 
           <div class="pdf-title">
