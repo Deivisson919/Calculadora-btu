@@ -110,7 +110,11 @@
 }
 
 .info-item img {
-  width: 42px;
+  width: 35px;
+  height: 35px;
+  display: block;
+  background-color: pink;
+  object-fit: contain;
 }
 
 .pdf-btu-card {

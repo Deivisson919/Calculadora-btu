@@ -51,7 +51,7 @@ function gerarPDF() {
 
   let opt = {
     margin: 0.5,
-    filename: "relatorio-btu.pdf",
+    filename: "Relatório BTUs.pdf",
 
     image: {
       type: "jpeg",
@@ -59,6 +59,8 @@ function gerarPDF() {
     },
 
     html2canvas: {
+      useCORS: true,
+      allowTaint: true,
       scale: 2
     },
 
@@ -144,7 +146,7 @@ function montarPDF() {
       <div class="pdf-info">
 
         <div class="info-item">
-        <img src = "assets/images/cracha.png" alt="Imagem">
+        <img src = "assets/Images/calendar.png" alt="Cliente">
              <div class = "info-texto">
                   <strong>CLIENTE:</strong>
                   <span>Empresa Exemplo</span>
@@ -152,7 +154,7 @@ function montarPDF() {
         </div>
 
         <div class="info-item">
-        <img src = "assets/images/project.png" alt="Imagem">
+        <img src = "assets/Images/calendar.png" alt="Projeto">
               <div class = "info-texto">
                   <strong>PROJETO:</strong>
                   <span>${projeto.tipo}</span>
