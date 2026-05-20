@@ -114,6 +114,7 @@
   height: 35px;
   display: block;
   background-color: pink;
+  object-fit: contain;
 }
 
 .pdf-btu-card {
