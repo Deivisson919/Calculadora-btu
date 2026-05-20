@@ -85,10 +85,12 @@
 
 .info-item {
   display: flex;
+  max-width: 310px;
+  width: 100%;
   flex: 1;
   align-items: center;
   border-left: #999999 solid 2px;
-  padding-left: 20px;
+  padding-left: 10px;
   gap: 15px;
 }
 

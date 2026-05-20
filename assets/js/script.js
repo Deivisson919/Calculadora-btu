@@ -16,6 +16,8 @@ let qtdPortas = 0;
 let qtdJanelas = 0;
 let resultadoFinal = 0;
 
+let dataProjeto = "";
+
 const capacidades = [9000, 12000, 18000, 24000, 30000, 36000, 48000, 60000];
 const LIMITE_DISTRIBUICAO = 180000;
 
@@ -163,9 +165,10 @@ function calcularBTU() {
 
   // 💾 SALVAR
   let rec = recomendacaoFinal(btuTotal);
+  dataProjeto = new Date().toLocaleDateString("pt-BR");
 
   salvarCalculo({
-    data: new Date().toLocaleString(),
+    data: new Date().toLocaleDateString("pt-BR"),
     nome: nomeAmbiente,
     largura,
     comprimento,
@@ -637,6 +640,7 @@ function verItem(index) {
 
   let historico = JSON.parse(localStorage.getItem("historicoBTU")) || [];
   let item = historico[index];
+  dataProjeto = item.data;
 
   if (!item) {
     alert("Item não encontrado.");

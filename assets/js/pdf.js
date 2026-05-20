@@ -87,6 +87,10 @@ function gerarPDF() {
 function montarPDF() {
 
   let pdfArea = document.getElementById("pdfArea");
+ 
+  let pessoas = parseInt(document.getElementById("pessoas").value) || 0;
+
+  let projeto = classificarProjeto(resultadoFinal, pessoas);
 
   pdfArea.innerHTML = `
 
@@ -119,15 +123,15 @@ function montarPDF() {
           <div class="side-item">
               <img src="assets/Images/calendar.png" alt="Calendário">
                 <p>
-                  Data do relatório<br>
-                  ${new Date().toLocaleString()}
+                  Data do relatório:<br>
+                  ${dataProjeto}
                 </p>
           </div>
 
           <div class="side-item">
               <img src="assets/Images/user.png" alt="Usuário">
                 <p>
-                  Responsável Técnico<br>
+                  Responsável Técnico:<br>
                   DF Intelligence
                 </p>
           </div>
@@ -142,7 +146,7 @@ function montarPDF() {
         <div class="info-item">
         <img src = "assets/images/cracha.png" alt="Imagem">
              <div class = "info-texto">
-                  <strong>CLIENTE</strong>
+                  <strong>CLIENTE:</strong>
                   <span>Empresa Exemplo</span>
               </div>
         </div>
@@ -150,8 +154,8 @@ function montarPDF() {
         <div class="info-item">
         <img src = "assets/images/project.png" alt="Imagem">
               <div class = "info-texto">
-                  <strong>PROJETO</strong>
-                  <span>Sala Comercial</span>
+                  <strong>PROJETO:</strong>
+                  <span>${projeto.tipo}</span>
               </div>
         </div>
 
