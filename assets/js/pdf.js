@@ -146,7 +146,7 @@ function montarPDF() {
       <div class="pdf-info">
 
         <div class="info-item">
-        <img src = "assets/Images/calendar.png" alt="Cliente">
+        <img src = "assets/Images/cracha.png" alt="Cliente">
              <div class = "info-texto">
                   <strong>CLIENTE:</strong>
                   <span>Empresa Exemplo</span>
@@ -154,7 +154,7 @@ function montarPDF() {
         </div>
 
         <div class="info-item">
-        <img src = "assets/Images/calendar.png" alt="Projeto">
+        <img src = "assets/Images/project.png" alt="Projeto">
               <div class = "info-texto">
                   <strong>PROJETO:</strong>
                   <span>${projeto.tipo}</span>
