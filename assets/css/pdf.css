@@ -180,3 +180,99 @@
 @page {
   margin: 0;
 }
+
+/*pagina 2*/
+
+.pdf-content-page2 {
+  margin-top: 300px;
+  box-sizing: border-box;
+}
+
+.tabela-memorial {
+  width: 100%;
+  margin-top: 30px;
+  max-width: 600px;
+  height: auto;
+  border-collapse: collapse;
+  overflow: hidden;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+
+.tabela-memorial thead {
+  background-color: #042F58;
+  color: white;
+  align-items: center;
+  justify-content: center;
+  font-weight: 200;
+}
+
+.tabela-memorial th {
+  padding: 18px;
+  font-size: 13px;
+  text-align: center;
+}
+
+.tabela-memorial td {
+  border: 1px solid #EDEDEE;
+  padding: 10px;
+  font-size: 14px;
+}
+
+.tabela-memorial td,
+.tabela-memorial th {
+  text-align: center;
+}
+
+.tabela-memorial td:nth-child(1),
+.tabela-memorial td:nth-child(2) {
+  background: #F9F9F9;
+}
+
+.tabela-memorial img {
+  width: 45px;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+}
+
+.tabela-memorial tbody tr {
+  background-color: white;
+  align-items: center;
+}
+
+.pdf-page h2 {
+  font-size: 34px;
+  color: #0b2f6b;
+  margin-bottom: 10px;
+}
+
+.linha-memorial {
+  width: 100%;
+  max-width: 600px;
+  height: 3px;
+  background-color: #2563eb;
+  margin-bottom: 30px;
+}
+
+.total-memorial {
+  margin-top: 0;
+  background: #F9F9F9;
+  border: 1px solid #e5e7eb;
+  border-top: none;
+  padding: 22px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom-left-radius: 14px;
+  border-bottom-right-radius: 14px;
+  width: 100%;
+  max-width: 600px;
+  box-sizing: border-box;
+}
+
+.total-memorial h1 {
+  font-size: 20px;
+  color: #2563eb;
+}

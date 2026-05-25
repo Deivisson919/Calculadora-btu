@@ -51,7 +51,7 @@ function gerarPDF() {
 
   let opt = {
     margin: 0.5,
-    filename: "Relatório BTUs.pdf",
+    filename: "Relatório Técnico HVAC.pdf",
 
     image: {
       type: "jpeg",
@@ -89,15 +89,16 @@ function gerarPDF() {
 function montarPDF() {
 
   let pdfArea = document.getElementById("pdfArea");
- 
+  let portas = parseInt(document.getElementById("portas").value) || 0;
   let pessoas = parseInt(document.getElementById("pessoas").value) || 0;
-
+  let eletronicos = parseInt(document.getElementById("eletronicos").value) || 0;
   let projeto = classificarProjeto(resultadoFinal, pessoas);
+
 
   pdfArea.innerHTML = `
 
   <div class="pdf-page">
-  <div class="pdf-content">
+    <div class="pdf-content">
       <!-- HEADER -->
       <div class="pdf-header">
 
@@ -204,5 +205,85 @@ function montarPDF() {
   </div>
 </div>
 
+
+<div class="pdf-page">
+<div class="pdf-content-page2">
+      <h2>MEMORIAL DE CÁLCULO</H2>
+        <div class ="linha-memorial"></div>
+      <table class="tabela-memorial">
+
+          <thead>
+          <tr>
+              <th>ITEM</th>
+              <th>DESCRIÇÃO</th>
+              <th>CÁLCULO</th>
+              <th>CARGA (BTUs)</th>
+          </tr>
+          </thead>
+
+          <tbody>
+              <tr>
+              <td> <img src = "assets/Images/area.png" alt="Area"></td>
+              <td>${area.toLocaleString("pt-BR")} m² </td>
+              <td>${area.toLocaleString("pt-BR")} m² x 600 BTU/m²</td>
+              <td>${detalheArea.toLocaleString("pt-BR")} BTUs</td>
+              </tr>
+
+            <tr>
+              <td> <img src = "assets/Images/people.png" alt="Pessoas"></td>
+              <td>PESSOAS</td>
+              <td>${qtdPessoas} x 600 BTU/pessoa</td>
+              <td>${detalhePessoas.toLocaleString("pt-BR")}</td>
+          </tr>
+
+          <tr>
+              <td> <img src = "assets/Images/tv.png" alt="Eletrônicos"></td>
+              <td>ELETRÔNICOS</td>
+              <td>${qtdEletronicos} x 600 BTU/aparelho</td>
+              <td>${detalheEletronicos.toLocaleString("pt-BR")}</td>
+          </tr>
+
+          <tr>
+          <td> <img src = "assets/Images/door.png" alt="Portas"></td>
+          <td>PORTAS</td>
+          <td>${qtdPortas} x 400 BTU/unidade</td>
+          <td>${detalhePortas.toLocaleString("pt-BR")}</td>
+          </tr>
+
+          <tr>
+          <td> <img src = "assets/Images/window.png" alt="Janelas"></td>
+          <td>JANELAS</td>
+          <td>${qtdJanelas} x BTU/unidade</td>
+          <td>${detalheJanelas.toLocaleString("pt-BR")}</td>
+          </tr>
+
+          <tr>
+          <td> <img src = "assets/Images/sun.png" alt="Insolação"></td>
+          <td>INSOLAÇÃO</td>
+          <td>${calculoSol}</td>
+          <td>${detalheSol.toLocaleString("pt-BR")}</td>
+          </tr>
+
+          <tr>
+          <td> <img src = "assets/Images/house.png" alt="Forro"></td>
+          <td>FORRO</td>
+          <td>${calculoForro}</td>
+          <td>${detalheForro.toLocaleString("pt-BR")}</td>
+          </tr>
+
+          <tr>
+          <td> <img src = "assets/Images/wall.png" alt="Paredes"></td>
+          <td>Paredes</td>
+          <td>${paredes} x 800 BTU/unidade</td>
+          <td>${detalheParedes.toLocaleString("pt-BR")}</td>
+          </tr>
+          </tbody>
+      </table>
+        <div class ="total-memorial">
+            <h1>Total</h1>
+            <h1>${resultadoFinal.toLocaleString("pt-BR")} BTUs</h1>
+        </div>
+  <div>
+<div>
   `;
 }

@@ -16,6 +16,8 @@ let qtdPortas = 0;
 let qtdJanelas = 0;
 let resultadoFinal = 0;
 
+let calculoSol = "";
+let calculoForro =""; 
 let dataProjeto = "";
 
 const capacidades = [9000, 12000, 18000, 24000, 30000, 36000, 48000, 60000];
@@ -131,22 +133,27 @@ function calcularBTU() {
 
   if (paredes > 0 && sol) {
 
-    if (sol === "1") {
-      detalheSol = btuTotal * 0.10;
-      btuTotal += detalheSol;
+    calculoSol = "Sem insolação"
+
+    if (sol === "1") { 
+        calculoSol = `Sol o dia todo + 10%`
+        detalheSol = btuTotal * 0.10;
+        btuTotal += detalheSol;
     }
 
     if (sol === "2") {
-      detalheSol = btuTotal * 0.05;
-      btuTotal += detalheSol;
+        calculoSol = `Meio período + 5%`
+        detalheSol = btuTotal * 0.05;
+        btuTotal += detalheSol;
     }
 
   }
 
   // 🔹 FORRO
   detalheForro = 0;
-
+  calculoForro = "Forrado"
   if (forro === "1") {
+    calculoForro = " Sem forro + 800 BTUs";
     detalheForro = 800;
     btuTotal += detalheForro;
   }
