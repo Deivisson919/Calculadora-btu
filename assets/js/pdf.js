@@ -226,7 +226,7 @@ function montarPDF() {
               <td> <img src = "assets/Images/area.png" alt="Area"></td>
               <td>${area.toLocaleString("pt-BR")} m² </td>
               <td>${area.toLocaleString("pt-BR")} m² x 600 BTU/m²</td>
-              <td>${detalheArea.toLocaleString("pt-BR")} BTUs</td>
+              <td>${detalheArea.toLocaleString("pt-BR")}</td>
               </tr>
 
             <tr>
@@ -280,7 +280,7 @@ function montarPDF() {
           </tbody>
       </table>
         <div class ="total-memorial">
-            <h1>Total</h1>
+            <h1>Total:</h1>
             <h1>${resultadoFinal.toLocaleString("pt-BR")} BTUs</h1>
         </div>
   <div>
