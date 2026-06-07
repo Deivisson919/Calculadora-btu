@@ -16,9 +16,14 @@ let qtdPortas = 0;
 let qtdJanelas = 0;
 let resultadoFinal = 0;
 
+let sistemaProjeto = {};
+let rec = {};
+let distribuicaoSelecionada = "";
+let nomeCliente = "";
 let calculoSol = "";
 let calculoForro =""; 
 let dataProjeto = "";
+let resultadoDistribuicao = "";
 
 const capacidades = [9000, 12000, 18000, 24000, 30000, 36000, 48000, 60000];
 const LIMITE_DISTRIBUICAO = 180000;
@@ -132,7 +137,6 @@ function calcularBTU() {
   detalheSol = 0;
 
   if (paredes > 0 && sol) {
-
     calculoSol = "Sem insolação"
 
     if (sol === "1") { 
@@ -171,7 +175,7 @@ function calcularBTU() {
   renderResultado(btuTotal, pessoas);
 
   // 💾 SALVAR
-  let rec = recomendacaoFinal(btuTotal);
+  rec = recomendacaoFinal(btuTotal);
   dataProjeto = new Date().toLocaleDateString("pt-BR");
 
   salvarCalculo({
@@ -248,8 +252,8 @@ function renderResultado(btuTotal, pessoas, area = 0) {
 
   let projeto = classificarProjeto(btuTotal, pessoas);
   let diagnostico = diagnosticoSistema(btuTotal);
-  let sistema = definirSistema(btuTotal, pessoas, area);
-  let rec = recomendacaoFinal(btuTotal);
+  sistemaProjeto = definirSistema(btuTotal, pessoas, area);
+  rec = recomendacaoFinal(btuTotal);
 
   let recomendacaoDiv = document.getElementById("recomendacao");
   let distribuicaoDiv = document.getElementById("distribuicao");
@@ -284,7 +288,7 @@ function renderResultado(btuTotal, pessoas, area = 0) {
     }
 
     recomendacaoHTML = `
-      ⚠️ <strong>Projeto HVAC de grande porte</strong><br><br>
+      ⚠️ <strong>Cálculo máximo suportado: 180.000 BTUs</strong><br><br>
 
       ${rec.alerta}<br><br>
 
@@ -305,19 +309,19 @@ function renderResultado(btuTotal, pessoas, area = 0) {
       📌 <strong>Cálculo total:</strong>
       ${btuTotal.toLocaleString("pt-BR")} BTUs<br><br>
 
-      🌬️ <strong>Espaço aberto:</strong><br>
+      🌬️ <strong>Espaço aberto:</strong><br><br>
       ${rec.aberto.texto}<br><br>
 
       <strong>Capacidade do sistema:</strong>
       ${rec.aberto.total.toLocaleString("pt-BR")} BTUs<br><br>
 
-      🏢 <strong>Média dificuldade de circulação:</strong><br>
+      🏢 <strong>Média dificuldade de circulação:</strong><br><br>
       ${rec.divisoes.texto}<br><br>
 
       <strong>Capacidade do sistema:</strong>
       ${rec.divisoes.total.toLocaleString("pt-BR")} BTUs<br><br>
 
-      🧱 <strong>Grande dificuldade de circulação:</strong><br>
+      🧱 <strong>Grande dificuldade de circulação:</strong><br><br>
       ${rec.fluxo.texto}<br><br>
 
       <strong>Capacidade do sistema:</strong>
@@ -342,13 +346,13 @@ function renderResultado(btuTotal, pessoas, area = 0) {
     </span><br><br>
 
     🏗️ <strong>Sistema recomendado:</strong><br>
-    ${sistema.sistema}<br><br>
+    ${sistemaProjeto.sistema}<br><br>
 
     🏢 <strong>Categoria do projeto:</strong><br>
-    ${sistema.categoria}<br><br>
+    ${sistemaProjeto.categoria}<br><br>
 
     📝 <strong>Análise técnica:</strong><br>
-    ${sistema.observacao}<br><br>
+    ${sistemaProjeto.observacao}<br><br>
 
     ${diagnostico.alerta ? `
       ⚠️ ${diagnostico.alerta}<br><br>
@@ -444,7 +448,7 @@ function combinarBTU(btu, modo = "normal") {
   // 🔒 fallback
   if (!melhor) {
     return {
-      texto: "⚠️ Não foi possível gerar distribuição.",
+      texto: "⚠️ Não foi possível gerar uma distribuição.",
       total: 0
     };
   }
@@ -469,7 +473,7 @@ function combinarBTU(btu, modo = "normal") {
     });
 
   return {
-    texto: "🔹 " + resultado.join("<br>🔹 "),
+    texto: resultado.join("<br>"),
     total: melhor.total
   };
 }
@@ -485,6 +489,14 @@ function recomendacaoFinal(btuTotal) {
   }
 
   // 🔹 recomendações simples
+
+  if (btuTotal <= 9000) {
+    return {
+      tipo: "simples",
+      texto: "1 aparelho de 9.000 BTUS"
+    };
+  }
+
   if (btuTotal <= 12000) {
     return {
       tipo: "simples",
@@ -682,8 +694,7 @@ function verItem(index) {
   renderResultado(btuTotal, item.pessoas);
 
   // 📌 GARANTIA EXTRA (evita lixo antigo se histórico antigo não tiver distribuição)
-  let rec = recomendacaoFinal(btuTotal);
-  renderResultado(btuTotal, pessoas);
+  rec = recomendacaoFinal(btuTotal);
 
   montarPDF();
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -860,6 +871,139 @@ window.addEventListener("load", function () {
       this.classList.remove("erro");
     }
   });
+});
+
+
+const modalOverlay =
+  document.getElementById("modalOverlay");
+
+const btnConfirmarPDF =
+  document.getElementById("btnConfirmarPDF");
+
+ 
+
+const fecharModal =
+  document.getElementById("fecharModal");
+
+
+
+// ABRIR MODAL
+function abrirModalPDF() {
+
+  atualizarCampoDistribuicao();
+  modalOverlay.classList.add("active");
+
+}
+
+function atualizarCampoDistribuicao() {
+
+  const campo =
+  document.getElementById("campoDistribuicao");
+
+  if (rec.tipo === "distribuicao") {
+
+      campo.style.display = "block";
+
+  } else {
+
+      campo.style.display = "none";
+
+  }
+
+}
+
+
+function validarDistribuicao() {
+
+  let distribuicaoSelecionada =
+  document.getElementById("tipoDistribuicao").value;
+
+
+  // VALIDAR
+  if (
+      resultadoFinal > 24000 &&
+      distribuicaoSelecionada === ""
+  ) {
+
+      alert("Escolha a distribuição");
+      return false;
+
+  }
+
+  // 🌬️ ABERTO
+  if (distribuicaoSelecionada === "aberto") {
+
+    resultadoDistribuicao = rec.aberto;
+
+  }
+
+  // 🏢 MÉDIO
+  else if (distribuicaoSelecionada === "medio") {
+
+    resultadoDistribuicao = rec.divisoes;
+
+  }
+
+  // 🧱 DIFÍCIL
+  else if (distribuicaoSelecionada === "dificil") {
+
+    resultadoDistribuicao = rec.fluxo;
+
+  }
+
+
+  return resultadoDistribuicao;
+
+}
+
+const btnGerarPDF = document.getElementById("btnConfirmarPDF");
+
+btnConfirmarPDF.addEventListener("click", () => {
+
+  nomeCliente =
+  document.getElementById("nomeCliente").value;
+
+  if (rec.tipo === "distribuicao") {
+
+      let distribuicaoFinal =
+      validarDistribuicao();
+
+      if (!distribuicaoFinal) {
+          return;
+      }
+
+  }
+
+  gerarPDF();
+  fecharModalPDF();
+
+});
+
+
+
+// FECHAR MODAL
+function fecharModalPDF() {
+
+  modalOverlay.classList.remove("active");
+
+}
+
+
+fecharModal.addEventListener(
+  "click",
+  fecharModalPDF
+);
+
+
+// FECHAR AO CLICAR FORA
+modalOverlay.addEventListener("click", (e) => {
+
+  if(e.target === modalOverlay) {
+
+    fecharModalPDF();
+
+  }
+
 });
 
 window.verItem = verItem;

@@ -16,6 +16,18 @@ body {
   min-height: 100vh;
 }
 
+header img {
+  position: absolute;
+  right: 40px;
+  top: 15px;
+  width: 48px;
+  cursor: pointer;
+}
+
+#campoDistribuicao {
+  display: none;
+}
+
 #resultado,
 #historico {
   overflow-wrap: break-word;
@@ -240,4 +252,155 @@ button:hover {
     padding: 0 20px;
   }
 
+}
+
+.container {
+  margin-top: 30px;
+}
+
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100vh;
+
+  background: rgba(0, 0, 0, 0.6);
+
+  display: none;
+
+  justify-content: center;
+  align-items: center;
+
+  z-index: 9999;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal-pdf {
+
+  width: 95%;
+  max-width: 700px;
+
+  background: white;
+
+  border-radius: 20px;
+
+  padding: 35px;
+
+  position: relative;
+
+  animation: abrirModal .25s ease;
+}
+
+@keyframes abrirModal {
+
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+.fechar-modal {
+
+  position: absolute;
+
+  top: 5px;
+  right: 15px;
+
+  border: none;
+  background: red;
+
+  font-size: 20px;
+
+  cursor: pointer;
+
+  width: 50px;
+}
+
+.modal-pdf h2 {
+
+  color: #032E57;
+
+  margin-bottom: 10px;
+
+  font-size: 30px;
+}
+
+.subtitulo-modal {
+
+  color: #555;
+
+  margin-bottom: 30px;
+}
+
+.campo-modal {
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+
+  margin-bottom: 25px;
+}
+
+.campo-modal select {
+  max-width: 400px;
+  width: 100%;
+}
+
+.campo-modal label {
+
+  font-weight: 600;
+}
+
+.campo-modal input {
+
+  height: 55px;
+
+  border-radius: 12px;
+
+  border: 1px solid #D9D9D9;
+
+  padding: 0 15px;
+
+  font-size: 16px;
+}
+
+.btn-gerar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 300px;
+  width: 100%;
+  height: 55px;
+  margin: 0 auto;
+  border: none;
+
+  border-radius: 14px;
+
+  background: #032E57;
+
+  color: white;
+
+  font-size: 16px;
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: .2s;
+}
+
+.btn-gerar:hover {
+  transform: scale(1.02);
 }

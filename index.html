@@ -14,6 +14,10 @@
 
   <div class="container">
 
+    <header>
+      <img src="assets/Images/settingwhite.png" alt="CONFIGURAÇÕES">
+    </header>
+
     <div class="card">
 
 
@@ -105,7 +109,7 @@
 
   </div>
 
-  <div class="pdf" style="display: none; justify-content: center;">
+  <div class="pdf" style="display: flex; justify-content: center;">
     <div id="pdfArea">
       <div class="pdf-page">
 
@@ -122,6 +126,71 @@
         </div>
 
       </div>
+    </div>
+  </div>
+
+
+  <!-- OVERLAY -->
+  <div class="modal-overlay" id="modalOverlay">
+
+    <!-- MODAL -->
+    <div class="modal-pdf">
+
+      <button class="fechar-modal" id="fecharModal">
+        ✕
+      </button>
+
+      <h2>Gerar PDF</h2>
+
+      <p class="subtitulo-modal">
+        Preencha os dados abaixo para gerar o PDF.
+      </p>
+
+      <!-- CLIENTE -->
+      <div class="campo-modal">
+
+        <label>
+          Nome do cliente:
+        </label>
+
+        <input type="text" id="nomeCliente" placeholder="Digite o nome do cliente">
+
+      </div>
+
+      <!-- DISTRIBUIÇÕES -->
+      <div class="campo-modal" id="campoDistribuicao">
+
+        <label>
+          Escolha uma distribuição:
+        </label>
+
+        <select id="tipoDistribuicao">
+
+          <option value="">
+            Escolha uma distribuição:
+          </option>
+
+          <option value="aberto">
+            Espaço aberto
+          </option>
+
+          <option value="medio">
+            Média dificuldade de circulação
+          </option>
+
+          <option value="dificil">
+            Grande dificuldade de circulação
+          </option>
+
+        </select>
+
+      </div>
+
+      <!-- BOTÃO -->
+      <button type="button" class="btn-gerar" id="btnConfirmarPDF">
+        Gerar PDF
+      </button>
+
     </div>
   </div>
 

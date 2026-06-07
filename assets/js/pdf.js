@@ -15,7 +15,7 @@ function renderBotaoPDF(tipo){
     <div style="margin-top:15px;">
 
       <a href="#"
-         onclick="gerarPDF()"
+         onclick="abrirModalPDF()"
          style="
          display: flex;
            color:#2563eb;
@@ -87,203 +87,272 @@ function gerarPDF() {
 }
 
 function montarPDF() {
-
+  
   let pdfArea = document.getElementById("pdfArea");
   let portas = parseInt(document.getElementById("portas").value) || 0;
   let pessoas = parseInt(document.getElementById("pessoas").value) || 0;
   let eletronicos = parseInt(document.getElementById("eletronicos").value) || 0;
   let projeto = classificarProjeto(resultadoFinal, pessoas);
 
-
   pdfArea.innerHTML = `
 
   <div class="pdf-page">
-    <div class="pdf-content">
-      <!-- HEADER -->
-      <div class="pdf-header">
+  <div class="pdf-content">
 
-        <!-- ESQUERDA -->
-        <div class="pdf-header-left">
+    <!-- HEADER -->
+    <div class="pdf-header">
 
-          <div class="pdf-logo">
+      <!-- ESQUERDA -->
+      <div class="pdf-header-left">
+
+        <div class="pdf-logo">
           <img src="assets/Images/logo df ar.png" alt="Calendário">
-          </div>
-
-          <div class="pdf-title">
-            <h2>
-              RELATÓRIO<br>
-              TÉCNICO HVAC
-            </h2>
-
-            <span>CÁLCULO DE CARGA TÉRMICA</span>
-          </div>
-
         </div>
 
-        <!-- DIREITA -->
-        <div class="pdf-side-card">
+        <div class="pdf-title">
+          <h2>
+            RELATÓRIO<br>
+            TÉCNICO HVAC
+          </h2>
 
-          <div class="side-item">
-              <img src="assets/Images/calendar.png" alt="Calendário">
-                <p>
-                  Data do relatório:<br>
-                  ${dataProjeto}
-                </p>
-          </div>
+          <span>CÁLCULO DE CARGA TÉRMICA</span>
+        </div>
 
-          <div class="side-item">
-              <img src="assets/Images/user.png" alt="Usuário">
-                <p>
-                  Responsável Técnico:<br>
-                  DF Intelligence
-                </p>
+      </div>
+
+      <!-- DIREITA -->
+      <div class="pdf-side-card">
+
+        <div class="side-item">
+          <img src="assets/Images/calendar.png" alt="Calendário">
+
+          <p>
+            Data do relatório:<br>
+            ${dataProjeto}
+          </p>
+        </div>
+
+        <div class="side-item">
+          <img src="assets/Images/user.png" alt="Usuário">
+
+          <p>
+            Responsável Técnico:<br>
+            DF Intelligence
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- INFO -->
+    <div class="pdf-info">
+
+      <div class="info-item">
+        <img src="assets/Images/cracha.png" alt="Cliente">
+
+        <div class="info-texto">
+          <strong>CLIENTE:</strong>
+          <span>${nomeCliente}</span>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <img src="assets/Images/project.png" alt="Projeto">
+
+        <div class="info-texto">
+          <strong>PROJETO:</strong>
+          <span>${projeto.tipo}</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CARD BTU -->
+    <div class="pdf-btu-card">
+
+      <div class="btu-topo">
+
+        <div class="icone-frio">
+          <img src="assets/Images/flocos-de-neve.png" alt="Frio">
+        </div>
+
+        <div class="btu-textos">
+
+          <h3>CARGA TÉRMICA TOTAL:</h3>
+
+          <div class="numero">
+            ${resultadoFinal.toLocaleString("pt-BR")} BTUs
           </div>
 
         </div>
 
       </div>
 
-      <!-- INFO -->
-      <div class="pdf-info">
+    </div>
 
-        <div class="info-item">
-        <img src = "assets/Images/cracha.png" alt="Cliente">
-             <div class = "info-texto">
-                  <strong>CLIENTE:</strong>
-                  <span>Empresa Exemplo</span>
-              </div>
-        </div>
+    <!-- RESUMO -->
+    <div class="pdf-resumo">
 
-        <div class="info-item">
-        <img src = "assets/Images/project.png" alt="Projeto">
-              <div class = "info-texto">
-                  <strong>PROJETO:</strong>
-                  <span>${projeto.tipo}</span>
-              </div>
-        </div>
+      <h3>RESUMO DO PROJETO</h3>
 
+      <hr>
+
+      <p>
+        Este relatório apresenta o cálculo de carga térmica
+        para o ambiente mencionado acima, utilizando metodologias
+        baseadas em fatores de carga térmica por área, ocupação,
+        equipamentos, aberturas, insolação e outros critérios técnicos.
+      </p>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="pdf-footer">
+
+      <div class="footer-item">
+        <img src="assets/Images/telephone.png" alt="Area">
+        <span>(99) 99999-9999</span>
       </div>
 
-      <!-- CARD BTU -->
-      <div class="pdf-btu-card">
-
-        <div class="btu-topo">
-
-          <div class="icone-frio">
-            <img src="assets/Images/flocos-de-neve.png" alt="Frio">
-          </div>
-
-          <div class="btu-textos">
-
-            <h3>CARGA TÉRMICA TOTAL:</h3>
-
-            <div class="numero">
-              ${resultadoFinal.toLocaleString("pt-BR")} BTUs
-            </div>
-
-          </div>
-
-        </div>
-
+      <div class="footer-item">
+        <img src="assets/Images/email.png" alt="Area">
+        <span>contato@empresaficticia.com.br</span>
       </div>
 
-      <!-- RESUMO -->
-      <div class="pdf-resumo">
+    </div>
 
-        <h3>RESUMO DO PROJETO</h3>
-
-        <hr>
-
-        <p>
-          Este relatório apresenta o cálculo de carga térmica
-          para o ambiente mencionado acima, utilizando metodologias
-          baseadas em fatores de carga térmica por área, ocupação,
-          equipamentos, aberturas, insolação e outros critérios técnicos.
-        </p>
-
-      </div>
   </div>
 </div>
 
-
 <div class="pdf-page">
-<div class="pdf-content-page2">
-      <h2>MEMORIAL DE CÁLCULO</H2>
-        <div class ="linha-memorial"></div>
-      <table class="tabela-memorial">
 
-          <thead>
-          <tr>
-              <th>ITEM</th>
-              <th>DESCRIÇÃO</th>
-              <th>CÁLCULO</th>
-              <th>CARGA (BTUs)</th>
-          </tr>
-          </thead>
+  <div class="pdf-content-page2">
 
-          <tbody>
-              <tr>
-              <td> <img src = "assets/Images/area.png" alt="Area"></td>
-              <td>${area.toLocaleString("pt-BR")} m² </td>
-              <td>${area.toLocaleString("pt-BR")} m² x 600 BTU/m²</td>
-              <td>${detalheArea.toLocaleString("pt-BR")}</td>
-              </tr>
+    <h2>MEMORIAL DE CÁLCULO</h2>
 
-            <tr>
-              <td> <img src = "assets/Images/people.png" alt="Pessoas"></td>
-              <td>PESSOAS</td>
-              <td>${qtdPessoas} x 600 BTU/pessoa</td>
-              <td>${detalhePessoas.toLocaleString("pt-BR")}</td>
-          </tr>
+    <div class="linha-memorial"></div>
 
-          <tr>
-              <td> <img src = "assets/Images/tv.png" alt="Eletrônicos"></td>
-              <td>ELETRÔNICOS</td>
-              <td>${qtdEletronicos} x 600 BTU/aparelho</td>
-              <td>${detalheEletronicos.toLocaleString("pt-BR")}</td>
-          </tr>
+    <table class="tabela-memorial">
 
-          <tr>
-          <td> <img src = "assets/Images/door.png" alt="Portas"></td>
+      <thead>
+        <tr>
+          <th>ITEM</th>
+          <th>DESCRIÇÃO</th>
+          <th>CÁLCULO</th>
+          <th>CARGA (BTUs)</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr>
+          <td><img src="assets/Images/area.png" alt="Area"></td>
+          <td>ÁREA</td>
+          <td>${area.toLocaleString("pt-BR")} m² x 600 BTU/m²</td>
+          <td>${detalheArea.toLocaleString("pt-BR")}</td>
+        </tr>
+
+        <tr>
+          <td><img src="assets/Images/people.png" alt="Pessoas"></td>
+          <td>PESSOAS</td>
+          <td>${qtdPessoas} x 600 BTU/pessoa</td>
+          <td>${detalhePessoas.toLocaleString("pt-BR")}</td>
+        </tr>
+
+        <tr>
+          <td><img src="assets/Images/tv.png" alt="Eletrônicos"></td>
+          <td>ELETRÔNICOS</td>
+          <td>${qtdEletronicos} x 600 BTU/aparelho</td>
+          <td>${detalheEletronicos.toLocaleString("pt-BR")}</td>
+        </tr>
+
+        <tr>
+          <td><img src="assets/Images/door.png" alt="Portas"></td>
           <td>PORTAS</td>
           <td>${qtdPortas} x 400 BTU/unidade</td>
           <td>${detalhePortas.toLocaleString("pt-BR")}</td>
-          </tr>
+        </tr>
 
-          <tr>
-          <td> <img src = "assets/Images/window.png" alt="Janelas"></td>
+        <tr>
+          <td><img src="assets/Images/window.png" alt="Janelas"></td>
           <td>JANELAS</td>
           <td>${qtdJanelas} x BTU/unidade</td>
           <td>${detalheJanelas.toLocaleString("pt-BR")}</td>
-          </tr>
+        </tr>
 
-          <tr>
-          <td> <img src = "assets/Images/sun.png" alt="Insolação"></td>
+        <tr>
+          <td><img src="assets/Images/sun.png" alt="Insolação"></td>
           <td>INSOLAÇÃO</td>
           <td>${calculoSol}</td>
           <td>${detalheSol.toLocaleString("pt-BR")}</td>
-          </tr>
+        </tr>
 
-          <tr>
-          <td> <img src = "assets/Images/house.png" alt="Forro"></td>
+        <tr>
+          <td><img src="assets/Images/house.png" alt="Forro"></td>
           <td>FORRO</td>
           <td>${calculoForro}</td>
           <td>${detalheForro.toLocaleString("pt-BR")}</td>
-          </tr>
+        </tr>
 
-          <tr>
-          <td> <img src = "assets/Images/wall.png" alt="Paredes"></td>
+        <tr>
+          <td><img src="assets/Images/wall.png" alt="Paredes"></td>
           <td>Paredes</td>
           <td>${paredes} x 800 BTU/unidade</td>
           <td>${detalheParedes.toLocaleString("pt-BR")}</td>
-          </tr>
-          </tbody>
-      </table>
-        <div class ="total-memorial">
-            <h1>Total:</h1>
-            <h1>${resultadoFinal.toLocaleString("pt-BR")} BTUs</h1>
-        </div>
-  <div>
-<div>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+    <div class="total-memorial">
+      <h1>Total:</h1>
+      <h1>${resultadoFinal.toLocaleString("pt-BR")} BTUs</h1>
+    </div>
+
+    <div class="box-observacao">
+
+      <div class="observacao-topo">
+        <img src="assets/Images/observacao.png" alt = "OBS">
+        <h3>OBSERVAÇÕES</h3>
+      </div>
+
+      <p>
+        Cálculo baseado em fatores médios de carga térmica conforme referências
+        ASHRAE, ABNT e práticas de engenharia aplicada em climatização.
+      </p>
+
+    </div>
+
+  </div>
+
+</div>
+
+<div class = "pdf-page">
+      <div class = "pdf-content-page3">
+            <h2>RECOMENDAÇÃO</h2>
+                <div class = "linha-recomendacao"></div>
+                      <div class = "box-recomendacao">
+                        <img src = "assets/Images/air-conditioning.png" alt = "ar-condicionado"> 
+                                <div class ="recomendacao-text" >
+                                      <h2>Equipamento sugerido</h2>
+
+                                     <span> ${rec.tipo === "simples"
+                                        ? rec.texto
+                                        : resultadoDistribuicao.texto}</span>
+
+                                       <h3> ${sistemaProjeto.sistema}</h3>
+
+                                      <p>Equipamento com capacidade adequada para atender a carga térmica calculada,
+                                        oferecendo conforto térmico e eficiência energética.
+                                      </p>
+                                </div><!--recomendação-text-->
+                      </div><!--box-recomendacao-->
+     </div> <!--pdf-content-page3-->
+</div> <!--pdf-page-->
+
+
+
   `;
 }
