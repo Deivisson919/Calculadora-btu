@@ -335,7 +335,7 @@ function montarPDF() {
                 <div class = "linha-recomendacao"></div>
                       <div class = "box-recomendacao">
                         <img src = "assets/Images/air-conditioning.png" alt = "ar-condicionado"> 
-                                <div class ="recomendacao-text" >
+                               <div class ="recomendacao-text" >
                                       <h2>Equipamento sugerido</h2>
 
                                      <span> ${rec.tipo === "simples"
@@ -349,6 +349,31 @@ function montarPDF() {
                                       </p>
                                 </div><!--recomendação-text-->
                       </div><!--box-recomendacao-->
+
+        <div class = "box-important">
+          <h2>INFORMAÇÕES IMPORTANTES</h2>
+              <div class = "inside-important">
+                    <div class = "important-item">
+                    <img src = "assets/Images/vento.png" alt = "Vento"> 
+                    <p>Manter filtros limpos para melhor eficiência do equipamento.</p>
+                    </div>
+
+                    <div class = "important-item">
+                    <img src = "assets/Images/termometro.png" alt = "Termômetro">
+                    <p>Temperatura ideal recomendada entre 23°C e 24°C.</p>
+                    </div>
+
+                    <div class = "important-item">
+                    <img src = "assets/Images/engrenagem.png" alt = "Engrenagem"> 
+                    <p>Realizar manutenções periódicas conforme manual do fabricante.</p>
+                    </div>
+
+                    <div class = "important-item">                    
+                    <img src = "assets/Images/folha.png" alt = "Folha"> 
+                    <p>Equipamentos Inverter proporcionam maior economia de energia.</p>
+                    </div>
+                </div><!--inside-important-->
+        </div><!--box-important-->
      </div> <!--pdf-content-page3-->
 </div> <!--pdf-page-->
 
