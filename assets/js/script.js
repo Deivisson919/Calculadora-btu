@@ -18,6 +18,7 @@ let resultadoFinal = 0;
 
 let sistemaProjeto = {};
 let rec = {};
+let projeto = {};
 let distribuicaoSelecionada = "";
 let nomeCliente = "";
 let calculoSol = "";
@@ -181,8 +182,10 @@ function calcularBTU() {
   salvarCalculo({
     data: new Date().toLocaleDateString("pt-BR"),
     nome: nomeAmbiente,
+    nomeCliente,
     largura,
     comprimento,
+    area,
     pessoas,
     eletronicos,
     portas,
@@ -193,7 +196,13 @@ function calcularBTU() {
     forro,
     btu: btuTotal,
 
+    sistema: sistemaProjeto.sistema,
+    categoria: sistemaProjeto.categoria,
+    observacao: sistemaProjeto.observacao,
+    tipoDistribuicao: distribuicaoSelecionada,
+
     distribuicao: rec.tipo === "distribuicao" ? {
+      tipoSelecionado: distribuicaoSelecionada,
       aberto: rec.aberto,
       divisoes: rec.divisoes,
       fluxo: rec.fluxo
@@ -250,7 +259,7 @@ function classificarProjeto(btuTotal, pessoas) {
 
 function renderResultado(btuTotal, pessoas, area = 0) {
 
-  let projeto = classificarProjeto(btuTotal, pessoas);
+  projeto = classificarProjeto(btuTotal, pessoas);
   let diagnostico = diagnosticoSistema(btuTotal);
   sistemaProjeto = definirSistema(btuTotal, pessoas, area);
   rec = recomendacaoFinal(btuTotal);
@@ -292,8 +301,6 @@ function renderResultado(btuTotal, pessoas, area = 0) {
 
       ${rec.alerta}<br><br>
 
-      🔧 <strong>Sistema recomendado:</strong><br>
-      ${rec.sistema}<br><br>
     `;
   }
 
@@ -332,18 +339,7 @@ function renderResultado(btuTotal, pessoas, area = 0) {
   // 🧠 BLOCO PRINCIPAL
   recomendacaoDiv.innerHTML = `
 
-    📊 <strong>Classificação:</strong><br>
-    ${projeto.tipo}<br><br>
-
-    🧠 <strong>Nível técnico:</strong><br>
-    ${projeto.nivel}<br><br>
-
     ${recomendacaoHTML}
-
-    📈 <strong>Nível do projeto:</strong><br>
-    <span style="color:${diagnostico.cor}; font-weight:bold;">
-      ${diagnostico.nivel}
-    </span><br><br>
 
     🏗️ <strong>Sistema recomendado:</strong><br>
     ${sistemaProjeto.sistema}<br><br>
@@ -701,7 +697,9 @@ function verItem(index) {
 }
 
 function travarFormulario(travar) {
-  let campos = document.querySelectorAll("input, select");
+  let campos = document.querySelectorAll(
+    "#nomeAmbiente, #largura, #comprimento, #pessoas, #eletronicos, #portas, #janelas, #paredes, #janela, #sol, #forro"
+  );
 
   campos.forEach(campo => {
     campo.disabled = travar;
@@ -915,7 +913,7 @@ function atualizarCampoDistribuicao() {
 
 function validarDistribuicao() {
 
-  let distribuicaoSelecionada =
+  distribuicaoSelecionada =
   document.getElementById("tipoDistribuicao").value;
 
 
@@ -961,7 +959,7 @@ const btnGerarPDF = document.getElementById("btnConfirmarPDF");
 btnConfirmarPDF.addEventListener("click", () => {
 
   nomeCliente =
-  document.getElementById("nomeCliente").value;
+  document.getElementById("nomeCliente").value.trim();
 
   if (rec.tipo === "distribuicao") {
 

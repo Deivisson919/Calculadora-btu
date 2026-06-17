@@ -92,7 +92,7 @@ function montarPDF() {
   let portas = parseInt(document.getElementById("portas").value) || 0;
   let pessoas = parseInt(document.getElementById("pessoas").value) || 0;
   let eletronicos = parseInt(document.getElementById("eletronicos").value) || 0;
-  let projeto = classificarProjeto(resultadoFinal, pessoas);
+
 
   pdfArea.innerHTML = `
 
