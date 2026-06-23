@@ -910,6 +910,43 @@ function atualizarCampoDistribuicao() {
 
 }
 
+function mostrarAviso(mensagem) {
+
+  document.getElementById("mensagemAviso").textContent = mensagem;
+
+  const overlay =
+      document.getElementById("modalAviso");
+
+  const modal =
+      overlay.querySelector(".modal-aviso");
+
+  overlay.classList.add("active");
+
+  setTimeout(() => {
+      modal.classList.add("show");
+  }, 10);
+
+}
+
+function fecharAviso() {
+
+  const overlay = document.getElementById("modalAviso");
+  const modal = document.querySelector(".modal-aviso");
+
+  modal.classList.add("saindo");
+
+  setTimeout(() => {
+
+    overlay.classList.remove("active");
+    modal.classList.remove("saindo");
+
+  }, 300);
+
+}
+
+document
+  .getElementById("btnFecharAviso")
+  .addEventListener("click", fecharAviso);
 
 function validarDistribuicao() {
 
@@ -923,7 +960,7 @@ function validarDistribuicao() {
       distribuicaoSelecionada === ""
   ) {
 
-      alert("Escolha a distribuição");
+    mostrarAviso("Escolha uma distribuição.");
       return false;
 
   }

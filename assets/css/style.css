@@ -236,6 +236,54 @@ button:hover {
   color: #2d6cdf;
 }
 
+.modal-aviso {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  animation: subirModal 0.3s ease;
+
+}
+
+.modal-aviso.saindo {
+  animation: descerModal 0.3s ease forwards;
+}
+
+@keyframes subirModal {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes descerModal {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+}
+
+.modal-aviso h2 {
+  margin-bottom: 15px;
+}
+
+.modal-aviso button {
+  margin-top: 20px;
+  width: 200px;
+}
+
 /*responsivo*/
 
 @media (max-width: 480px) {
