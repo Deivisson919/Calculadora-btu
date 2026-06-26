@@ -8,6 +8,18 @@ let detalheSol = 0;
 let detalheForro = 0;
 let detalheParedes = 0;
 
+let largura = 0;
+let comprimento = 0;
+let pessoas = 0;
+let eletronicos = 0;
+let portas = 0;
+let janelas  = 0;
+let tipoJanela = "";
+let sol = "";
+let forro = "";
+let btuTotal = 0;
+let nomeAmbiente = "";
+
 let area = 0;
 let paredes = 0;
 let qtdPessoas = 0;
@@ -29,28 +41,37 @@ let resultadoDistribuicao = "";
 const capacidades = [9000, 12000, 18000, 24000, 30000, 36000, 48000, 60000];
 const LIMITE_DISTRIBUICAO = 180000;
 
-// CALCULAR
+// 🔧 PARSE
+function parseNumero(valor) {
+  if (!valor) return NaN;
+  valor = valor.toString().trim();
+  if (valor.includes(',')) {
+    valor = valor.replace(/\./g, '').replace(',', '.');
+  }
+  return parseFloat(valor);
+}
+
 function calcularBTU() {
 
   let nomeInput = document.getElementById("nomeAmbiente");
-  let nomeAmbiente = nomeInput ? nomeInput.value.trim() : "";
+   nomeAmbiente = nomeInput ? nomeInput.value.trim() : "";
   if (!nomeAmbiente) nomeAmbiente = "Ambiente";
 
-  let largura = parseNumero(document.getElementById("largura").value);
-  let comprimento = parseNumero(document.getElementById("comprimento").value);
+   largura = parseNumero(document.getElementById("largura").value);
+   comprimento = parseNumero(document.getElementById("comprimento").value);
 
   area = largura * comprimento;
 
-  let pessoas = parseInt(document.getElementById("pessoas").value) || 0;
-  let eletronicos = parseInt(document.getElementById("eletronicos").value) || 0;
-  let portas = parseInt(document.getElementById("portas").value) || 0;
-  let janelas = parseInt(document.getElementById("janelas").value) || 0;
+   pessoas = parseInt(document.getElementById("pessoas").value) || 0;
+   eletronicos = parseInt(document.getElementById("eletronicos").value) || 0;
+   portas = parseInt(document.getElementById("portas").value) || 0;
+   janelas = parseInt(document.getElementById("janelas").value) || 0;
 
   paredes = parseInt(document.getElementById("paredes").value) || 0;
 
-  let tipoJanela = document.getElementById("janela").value;
-  let sol = document.getElementById("sol").value;
-  let forro = document.getElementById("forro").value;
+   tipoJanela = document.getElementById("janela").value;
+   sol = document.getElementById("sol").value;
+   forro = document.getElementById("forro").value;
 
   // 🔴 VALIDAÇÕES
   let inputLargura = document.getElementById("largura");
@@ -99,7 +120,7 @@ function calcularBTU() {
   qtdPortas = portas;
 
   // 🔥 CÁLCULO BASE
-  let btuTotal =
+   btuTotal =
     (area * 600) +
     (pessoasExtra * 600) +
     (eletronicos * 600) +
@@ -179,6 +200,9 @@ function calcularBTU() {
   rec = recomendacaoFinal(btuTotal);
   dataProjeto = new Date().toLocaleDateString("pt-BR");
 
+}
+
+function salvarProjeto() {
   salvarCalculo({
     data: new Date().toLocaleDateString("pt-BR"),
     nome: nomeAmbiente,
@@ -208,33 +232,29 @@ function calcularBTU() {
       fluxo: rec.fluxo
     } : null
   });
+}
 
-  // 🔄 RESET ESTADO
-  indexEditando = null;
-  modoVisualizacao = false;
+function resetarTela(){
+indexEditando = null;
+modoVisualizacao = false;
 
-  carregarHistorico();
+carregarHistorico();
 
-  setTimeout(() => {
-    limparFormulario();
-  }, 100);
+setTimeout(() => {
+  limparFormulario();
+}, 100);
 
-  // 🔘 RESET BOTÃO
-  let btn = document.getElementById("btnCalcular");
-  btn.innerText = "Calcular";
+let btn = document.getElementById("btnCalcular");
+btn.innerText = "Calcular";
+
+}
+
+function criarPDF(){
 
   montarPDF();
+
 }
 
-// 🔧 PARSE
-function parseNumero(valor) {
-  if (!valor) return NaN;
-  valor = valor.toString().trim();
-  if (valor.includes(',')) {
-    valor = valor.replace(/\./g, '').replace(',', '.');
-  }
-  return parseFloat(valor);
-}
 
 // 🔧 CLASSIFICAÇÃO
 function classificarProjeto(btuTotal, pessoas) {
@@ -655,45 +675,88 @@ function verItem(index) {
 
   let historico = JSON.parse(localStorage.getItem("historicoBTU")) || [];
   let item = historico[index];
-  dataProjeto = item.data;
+  resultadoFinal = item.btu;
+  console.log(item);
 
+  console.log("item.btu =", item.btu);
+  console.log("item['btu'] =", item["btu"]);
+  
+  resultadoFinal = item.btu;
+  
+  console.log("resultadoFinal =", resultadoFinal);
+  
+  dataProjeto = item.data;
   if (!item) {
-    alert("Item não encontrado.");
+    mostrarAviso("Item não encontrado.");
     return;
   }
 
-  // 🔧 Preencher formulário
+  dataProjeto = item.data || "";
+
+  nomeCliente = item.nomeCliente || "";
+
+  largura = Number(item.largura) || 0;
+  comprimento = Number(item.comprimento) || 0;
+  area = Number(item.area) || (largura * comprimento);
+
+  pessoas = Number(item.pessoas) || 0;
+  eletronicos = Number(item.eletronicos) || 0;
+  portas = Number(item.portas) || 0;
+  janelas = Number(item.janelas) || 0;
+  paredes = Number(item.paredes) || 0;
+
+  tipoJanela = item.tipoJanela || "";
+  sol = item.sol || "";
+  forro = item.forro || "";
+
+  distribuicaoSelecionada =
+    item.tipoDistribuicao || "";
+
+  sistemaProjeto = {
+    sistema: item.sistema || "",
+    categoria: item.categoria || "",
+    observacao: item.observacao || ""
+  };
+
   document.getElementById("nomeAmbiente").value = item.nome;
-  document.getElementById("largura").value = item.largura;
-  document.getElementById("comprimento").value = item.comprimento;
-  document.getElementById("pessoas").value = item.pessoas;
-  document.getElementById("eletronicos").value = item.eletronicos;
-  document.getElementById("portas").value = item.portas;
-  document.getElementById("janelas").value = item.janelas;
-  document.getElementById("paredes").value = item.paredes;
+  document.getElementById("largura").value = largura;
+  document.getElementById("comprimento").value = comprimento;
+  document.getElementById("pessoas").value = pessoas;
+  document.getElementById("eletronicos").value = eletronicos;
+  document.getElementById("portas").value = portas;
+  document.getElementById("janelas").value = janelas;
+  document.getElementById("paredes").value = paredes;
 
-  document.getElementById("janela").value = item.tipoJanela;
-  document.getElementById("sol").value = item.sol;
-  document.getElementById("forro").value = item.forro;
+  document.getElementById("janela").value = tipoJanela;
+  document.getElementById("sol").value = sol;
+  document.getElementById("forro").value = forro;
 
-  // 🔒 Travar formulário
   travarFormulario(true);
 
   let btuTotal = item.btu;
 
-  // 📊 RESULTADO (DIV 1 - topo)
   document.getElementById("resultado").innerHTML =
     `📍 <strong>${item.nome}</strong><br>
      🔥 <strong>${btuTotal.toLocaleString("pt-BR")} BTUS</strong>`;
 
-  // 🔥 CHAMA O MOTOR CENTRAL (SEM DUPLICAR LÓGICA)
-  renderResultado(btuTotal, item.pessoas);
+  renderResultado(btuTotal, pessoas);
 
-  // 📌 GARANTIA EXTRA (evita lixo antigo se histórico antigo não tiver distribuição)
   rec = recomendacaoFinal(btuTotal);
 
+  console.log("resultadoFinal:", resultadoFinal);
+  console.log("rec:", rec);
+  console.log("sistemaProjeto:", sistemaProjeto);
+  console.log("projeto:", projeto);
+  console.log("resultadoDistribuicao:", resultadoDistribuicao);
+  console.log("nomeCliente:", nomeCliente);
+
   montarPDF();
-  window.scrollTo({ top: 0, behavior: "smooth" });
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
 }
 
 function travarFormulario(travar) {
@@ -727,6 +790,10 @@ function acaoBotao(){
   }
   else {
     calcularBTU();
+    salvarProjeto();
+    carregarHistorico();
+    criarPDF();
+    resetarTela();
   }
 }
 
