@@ -9,6 +9,8 @@
   font-family: Arial;
   overflow: hidden;
   color: #0f172a;
+  page-break-after: always;
+  break-after: page;
 }
 
 .pdf-content {
@@ -32,8 +34,9 @@
 }
 
 
-.pdf-logo img {
-  width: 130px;
+.pdf-img-header img {
+  width: 135px;
+  object-fit: contain;
 }
 
 .pdf-title {
@@ -224,7 +227,6 @@
 
 .pdf-content-page2 {
   box-sizing: border-box;
-  page-break-after: always;
 }
 
 .tabela-memorial {

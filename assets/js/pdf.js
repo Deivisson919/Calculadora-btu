@@ -68,6 +68,10 @@ function gerarPDF() {
       unit: "in",
       format: "a4",
       orientation: "portrait"
+    },
+
+    pagebreak: {
+      mode:["css","legacy"]
     }
   };
 
@@ -105,8 +109,8 @@ function montarPDF() {
       <!-- ESQUERDA -->
       <div class="pdf-header-left">
 
-        <div class="pdf-logo">
-          <img src="assets/Images/logo df ar.png" alt="Calendário">
+        <div class="pdf-img-header">
+          <img src="assets/Images/img-header.png" alt="Calendário">
         </div>
 
         <div class="pdf-title">
