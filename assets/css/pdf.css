@@ -391,7 +391,7 @@
   background: #F6F6F7;
   max-width: 600px;
   width: 100%;
-  height: 350px;
+  max-height: 350px;
 }
 
 .recomendacao-text span {
