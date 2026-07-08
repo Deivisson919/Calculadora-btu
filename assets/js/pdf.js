@@ -211,6 +211,27 @@ function montarPDF() {
 
     </div>
 
+  <div class = "box-apresentacao">
+      <div class = "inside-apresentacao">
+
+          <div class = "apresentacao-item"> 
+          <img src="assets/Images/area.png" alt="Area">
+            <span>${area.toLocaleString("pt-BR")} m²</span>
+          </div>     
+
+          <div class = "apresentacao-item"> 
+          <img src="assets/Images/people.png" alt="Pessoas">
+          <span> ${qtdPessoas}</span> 
+          </div>     
+
+          <div class = "apresentacao-item"> 
+          <img src="assets/Images/window.png" alt="Janelas">
+          <span> ${qtdJanelas}</span>
+          </div>     
+          
+      </div><!--inside-apresentacao-->
+  </div><!--apresentação-->
+
     <!-- FOOTER -->
     <div class="pdf-footer">
 
@@ -231,7 +252,7 @@ function montarPDF() {
 
 <div class="pdf-page">
 
-  <div class="pdf-content-page2">
+  <div class="pdf-content">
 
     <h2>MEMORIAL DE CÁLCULO</h2>
 
@@ -334,7 +355,7 @@ function montarPDF() {
 </div>
 
 <div class = "pdf-page">
-      <div class = "pdf-content-page3">
+      <div class = "pdf-content">
             <h2>RECOMENDAÇÃO</h2>
                 <div class = "linha-recomendacao"></div>
                       <div class = "box-recomendacao">
@@ -378,7 +399,7 @@ function montarPDF() {
                     </div>
                 </div><!--inside-important-->
         </div><!--box-important-->
-     </div> <!--pdf-content-page3-->
+     </div> <!--pdf-content-->
 </div> <!--pdf-page-->
 
 
