@@ -93,9 +93,7 @@
 
 .info-item {
   display: flex;
-  max-width: 310px;
-  width: 100%;
-  flex: 1;
+  width: 310px;
   align-items: center;
   border-left: #999999 solid 2px;
   padding-left: 10px;
@@ -192,7 +190,7 @@
   background-color: #F6F6F7;
   max-width: 590px;
   width: 100%;
-  height: 400px;
+  max-height: 400px;
   margin: 40px 60px;
   border-radius: 15px;
 }
