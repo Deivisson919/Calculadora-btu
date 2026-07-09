@@ -40,9 +40,6 @@
   object-fit: contain;
 }
 
-.pdf-title {
-  margin-top: 10px;
-}
 
 .pdf-title h2 {
   font-size: 40px;
@@ -88,7 +85,7 @@
 .pdf-info {
   display: flex;
   gap: 40px;
-  margin-top: 40px;
+  margin-top: 15px;
 }
 
 .info-item {
@@ -113,9 +110,12 @@
 
 .info-texto span {
   color: black;
+  display: block;
+  max-height: 38px;
+  overflow: hidden;
   word-break: break-word;
-  overflow-wrap: break-word;
   white-space: normal;
+  line-height: 19px;
 }
 
 .info-item img {
@@ -123,7 +123,7 @@
 }
 
 .pdf-btu-card {
-  margin-top: 40px;
+  margin-top: 25px;
   background: linear-gradient(90deg, #003b8e, #01295f);
   border-radius: 20px;
   padding: 35px;
@@ -170,7 +170,7 @@
 .pdf-resumo {
   text-align: justify;
   line-height: 1.2;
-  margin-top: 40px;
+  margin-top: 20px;
   max-width: 600px;
   width: 100%;
 }
@@ -191,7 +191,8 @@
   max-width: 590px;
   width: 100%;
   max-height: 400px;
-  margin: 40px 60px;
+  margin-left: 0;
+  margin-top: 20px;
   border-radius: 15px;
 }
 
