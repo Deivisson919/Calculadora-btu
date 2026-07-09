@@ -149,21 +149,7 @@ function montarPDF() {
 
     </div>
 
-    <!-- INFO -->
-    <div class="pdf-info">
 
-      <div class="info-item">
-
-
-        <div class="info-texto">
-          <strong>CLIENTE:</strong>
-          <span>${nomeCliente}</span>
-        </div>
-      </div>
-
-     
-
-    </div>
 
     <!-- CARD BTU -->
     <div class="pdf-btu-card">
