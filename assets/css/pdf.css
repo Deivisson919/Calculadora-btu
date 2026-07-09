@@ -2,11 +2,12 @@
   position: relative;
   overflow: hidden;
   width: 794px;
-  height: 900px;
+  height: 100%;
+  max-height: 1000px;
   margin: 0 auto;
   padding: 10px 20px;
   box-sizing: border-box;
-  background: rgb(210, 0, 0);
+  background: rgb(226, 112, 143);
   font-family: Arial;
   overflow: hidden;
   color: #0f172a;
@@ -86,6 +87,8 @@
   display: flex;
   gap: 40px;
   margin-top: 15px;
+  max-height: 20px;
+  height: 100%;
 }
 
 .info-item {
