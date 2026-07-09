@@ -153,7 +153,7 @@ function montarPDF() {
     <div class="pdf-info">
 
       <div class="info-item">
-        <img src="assets/Images/cracha.png" alt="Cliente">
+
 
         <div class="info-texto">
           <strong>CLIENTE:</strong>
@@ -161,14 +161,7 @@ function montarPDF() {
         </div>
       </div>
 
-      <div class="info-item">
-        <img src="assets/Images/project.png" alt="Projeto">
-
-        <div class="info-texto">
-          <strong>PROJETO:</strong>
-          <span>${projeto.tipo}</span>
-        </div>
-      </div>
+     
 
     </div>
 
@@ -210,27 +203,6 @@ function montarPDF() {
       </p>
 
     </div>
-
-  <div class = "box-apresentacao">
-      <div class = "inside-apresentacao">
-
-          <div class = "apresentacao-item"> 
-          <img src="assets/Images/area.png" alt="Area">
-            <span>${area.toLocaleString("pt-BR")} m²</span>
-          </div>     
-
-          <div class = "apresentacao-item"> 
-          <img src="assets/Images/people.png" alt="Pessoas">
-          <span> ${qtdPessoas}</span> 
-          </div>     
-
-          <div class = "apresentacao-item"> 
-          <img src="assets/Images/window.png" alt="Janelas">
-          <span> ${qtdJanelas}</span>
-          </div>     
-          
-      </div><!--inside-apresentacao-->
-  </div><!--apresentação-->
 
     <!-- FOOTER -->
     <div class="pdf-footer">
