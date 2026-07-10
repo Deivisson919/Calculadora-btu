@@ -47,10 +47,14 @@ function esperarRenderizacao() {
   return new Promise(resolve => {
       requestAnimationFrame(() => {
           requestAnimationFrame(() =>{
-            resolve();
-          });
-      });
-  });  
+              requestAnimationFrame(() =>{
+                requestAnimationFrame(()=>{
+                  resolve();
+              });
+            }); 
+        });  
+    });
+});
 }
 
 async function esperarImagens(container) {

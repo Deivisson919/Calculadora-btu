@@ -954,6 +954,8 @@ const fecharModal =
 
 // ABRIR MODAL
 function abrirModalPDF() {
+  
+  montarPDF();
 
   atualizarCampoDistribuicao();
   modalOverlay.classList.add("active");
