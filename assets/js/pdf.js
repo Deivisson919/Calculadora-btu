@@ -101,7 +101,9 @@ await esperarRenderizacao();
     html2canvas: {
       useCORS: true,
       allowTaint: true,
-      scale: 1
+      scale: 2,
+      windowWidth: 1200,
+      loggin : true
     },
 
     jsPDF: {
