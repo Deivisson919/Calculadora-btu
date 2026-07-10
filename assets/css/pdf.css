@@ -12,6 +12,8 @@
   color: #0f172a;
   page-break-after: always;
   break-after: page;
+  page-break-inside: avoid !important;
+  break-inside: avoid !important;
   border: 3px solid red;
 }
 
