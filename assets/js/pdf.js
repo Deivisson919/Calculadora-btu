@@ -110,9 +110,6 @@ await esperarRenderizacao();
       orientation: "portrait"
     },
 
-    pagebreak: {
-      mode:["css","legacy"]
-    }
   };
 
 console.log(elemento);
