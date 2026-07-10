@@ -180,7 +180,28 @@ function montarPDF() {
 
     </div>
 
+    <!-- INFO -->
+    <div class="pdf-info">
 
+      <div class="info-item">
+        <img src="assets/Images/cracha.png" alt="Cliente">
+
+        <div class="info-texto">
+          <strong>CLIENTE:</strong>
+          <span>${nomeCliente}</span>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <img src="assets/Images/project.png" alt="Projeto">
+
+        <div class="info-texto">
+          <strong>PROJETO:</strong>
+          <span>${projeto.tipo}</span>
+        </div>
+      </div>
+
+    </div>
 
     <!-- CARD BTU -->
     <div class="pdf-btu-card">
