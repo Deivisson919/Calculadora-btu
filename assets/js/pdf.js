@@ -101,7 +101,7 @@ await esperarRenderizacao();
     html2canvas: {
       useCORS: true,
       allowTaint: true,
-      scale: 2
+      scale: 1
     },
 
     jsPDF: {
@@ -110,6 +110,9 @@ await esperarRenderizacao();
       orientation: "portrait"
     },
 
+    pagebreak: {
+      mode:["css","legacy"]
+    }
   };
 
 console.log(elemento);
