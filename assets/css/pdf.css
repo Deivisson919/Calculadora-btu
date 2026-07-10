@@ -3,7 +3,7 @@
   overflow: hidden;
   width: 794px;
   height: 1000px;
-  margin: 0 auto;
+  margin: 0 !important;
   padding: 10px 20px;
   box-sizing: border-box;
   background: rgb(255, 255, 255);
@@ -23,6 +23,15 @@
   margin-bottom: 10px;
 }
 
+#pdfarea {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.pdf {
+  margin: 0 !important;
+  padding: 0 !important;
+}
 
 .pdf-content {
   box-sizing: border-box;
