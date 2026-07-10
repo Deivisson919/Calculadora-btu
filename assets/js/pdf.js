@@ -43,7 +43,17 @@ function renderBotaoPDF(tipo){
 
 }
 
-function gerarPDF() {
+function esperarRenderizacao() {
+  return new Promise(resolve => {
+      requestAnimationFrame(() => {
+          requestAnimationFrame(() =>{
+            resolve();
+          });
+      });
+  });  
+}
+
+async function gerarPDF() {
 
   montarPDF();
 
@@ -75,19 +85,16 @@ function gerarPDF() {
     }
   };
 
-  setTimeout(() => {
+await esperarRenderizacao();
 
-    console.log(elemento);
-    console.log(elemento.innerHTML);
-    console.log(elemento.offsetHeight);
+console.log(elemento);
+console.log(elemento.innerHTML);
+console.log(elemento.offsetHeight);
 
-    html2pdf()
-      .set(opt)
-      .from(elemento)
-      .save();
-
-  }, 500);
-
+html2pdf()
+.set(opt)
+.from(elemento)
+.save();
 }
 
 function montarPDF() {
