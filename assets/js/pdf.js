@@ -53,11 +53,37 @@ function esperarRenderizacao() {
   });  
 }
 
+async function esperarImagens(container) {
+
+  const imagens = container.querySelectorAll("img");
+
+  for (const img of imagens) {
+
+    if (!img.complete || img.naturalWidth === 0) {
+      await new Promise(resolve => {
+        img.onload = resolve;
+        img.onerror = resolve;
+      });
+    }
+
+    if (img.decode) {
+      try {
+        await img.decode();
+      } catch (e) {
+      }
+    }
+  }
+
+}
+
 async function gerarPDF() {
 
   montarPDF();
 
   let elemento = document.getElementById("pdfArea");
+
+await esperarImagens(elemento);
+await esperarRenderizacao();
 
   let opt = {
     margin: 0.5,
@@ -84,8 +110,6 @@ async function gerarPDF() {
       mode:["css","legacy"]
     }
   };
-
-await esperarRenderizacao();
 
 console.log(elemento);
 console.log(elemento.innerHTML);
