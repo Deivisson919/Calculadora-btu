@@ -34,6 +34,7 @@ let projeto = {};
 let distribuicaoSelecionada = "";
 let nomeCliente = "";
 let calculoSol = "";
+let calculoJanela = "";
 let calculoForro =""; 
 let dataProjeto = "";
 let resultadoDistribuicao = "";
@@ -129,26 +130,29 @@ function calcularBTU() {
   // 🔹 JANELAS
   detalheJanelas = 0;
   qtdJanelas = 0;
+  calculoJanela  = "Sem janela";
 
   if (tipoJanela && janelas > 0) {
 
     qtdJanelas = janelas;
+    let textoJanela = ""
 
     if (tipoJanela === "1") {
+      textoJanela = qtdJanelas === 1 ? "pequena x 400 BTU/Unidade" : "pequenas x 400 BTU/Unidade";
       detalheJanelas = janelas * 400;
-      btuTotal += detalheJanelas;
     }
 
     if (tipoJanela === "2") {
+      textoJanela = qtdJanelas === 1 ? "média x 800 BTU/Unidade" : "médias x 800 BTU/Unidade";
       detalheJanelas = janelas * 800;
-      btuTotal += detalheJanelas;
     }
 
     if (tipoJanela === "3") {
+      textoJanela = qtdJanelas === 1 ? "grande x 1200 BTU/Unidade" : "grandes x 1200 BTU/Unidade";
       detalheJanelas = janelas * 1200;
-      btuTotal += detalheJanelas;
     }
-
+    btuTotal += detalheJanelas;
+    calculoJanela = `${qtdJanelas} ${textoJanela}`;
   }
 
   // 🔹 PAREDES
@@ -157,9 +161,9 @@ function calcularBTU() {
 
   // 🔹 SOL
   detalheSol = 0;
+  calculoSol = "Sem insolação"
 
   if (paredes > 0 && sol) {
-    calculoSol = "Sem insolação"
 
     if (sol === "1") { 
         calculoSol = `Sol o dia todo + 10%`

@@ -316,7 +316,7 @@ function montarPDF() {
         <tr>
           <td><img src="assets/Images/window.png" alt="Janelas"></td>
           <td>JANELAS</td>
-          <td>${qtdJanelas} x BTU/unidade</td>
+          <td>${calculoJanela}</td>
           <td>${detalheJanelas.toLocaleString("pt-BR")}</td>
         </tr>
 
