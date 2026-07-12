@@ -2,7 +2,7 @@
   position: relative;
   overflow: hidden;
   width: 794px;
-  height: 1000px;
+  height: 980px;
   margin: 0 !important;
   padding: 10px 20px;
   box-sizing: border-box;
@@ -14,7 +14,6 @@
   break-after: page;
   page-break-inside: avoid !important;
   break-inside: avoid !important;
-  border: 3px solid red;
 }
 
 .pdf-page h2 {
@@ -35,7 +34,6 @@
 
 .pdf-content {
   box-sizing: border-box;
-  border: 3px solid blue;
 }
 
 .pdf-header {
