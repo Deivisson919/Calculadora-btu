@@ -308,7 +308,7 @@ function montarPDF() {
 
         <tr>
           <td><img src="assets/Images/door.png" alt="Portas"></td>
-          <td>PORTAS</td>
+          <td>PORTAS EXTERNAS</td>
           <td>${qtdPortas} x 400 BTU/unidade</td>
           <td>${detalhePortas.toLocaleString("pt-BR")}</td>
         </tr>

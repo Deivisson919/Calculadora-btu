@@ -1114,6 +1114,28 @@ modalOverlay.addEventListener("click", (e) => {
 
 });
 
+nomeCliente = document.getElementById("nomeCliente");
+const contadorNome = document.getElementById("contadorNome");
+nomeCliente.addEventListener("input", function(){
+
+this.value = this.value.replace(/^\s+/, "");
+
+this.value = this.value.replace(/\s{2,}/g, " ");
+
+const tamanho = this.value.length;
+  
+  contadorNome.textContent = `Contador de Letras: ${tamanho}/40`;
+
+if (tamanho <= 25){
+  contadorNome.style.color = "#000";}
+
+else if (tamanho <= 39){
+    contadorNome.style.color = "#f39c12";}
+  
+else {
+  contadorNome.style.color = "#e74c3c";}
+});
+
 window.verItem = verItem;
 window.editarItem = editarItem;
 window.excluirItem = excluirItem;
