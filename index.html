@@ -12,20 +12,45 @@
 
 <body>
 
+  <header>
+    <div class="logo-area">
+      <img src="assets/Images/Ar.png" alt="AR">
+      <div class="logo-text">
+        <h1>AIR <span>CONFORT</span></h1>
+      </div>
+    </div>
+
+    <div class="menu-container">
+      <button class="menu-button" onclick="toggleMenu()">
+        ☰
+      </button>
+      <div class="menu-dropdown" id="menuDropdown">
+        <a href="#" onclick="abrirConfiguracaoPDF()">
+          Configurações do PDF
+        </a>
+
+        <a href="#">
+          Informações
+        </a>
+
+        <a href="#">
+          Minha Conta
+        </a>
+
+        <a href="#">
+          Projetos Salvos
+        </a>
+
+        <a href="#" class="exit" onclick="logout()">
+          Sair
+        </a>
+      </div>
+    </div>
+  </header>
+
   <div class="container">
 
-    <header>
-      <img src="assets/Images/settingwhite.png" alt="CONFIGURAÇÕES">
-    </header>
-
     <div class="card">
-
-
-      <div class="logo">
-        <div class="logo-icon"><img src="assets/Images/Ar.png" alt="Logo BTU"></div><!--logo icon-->
-        <h1>BTU<span>Calculator</span></h1>
-      </div><!--logo-->
-
       <div class="name"><!-- NOME DO AMBIENTE -->
         <h3>Nome do ambiente:</h3>
         <input type="text" id="nomeAmbiente" placeholder="Ex: Sala, Quarto, Cozinha">
