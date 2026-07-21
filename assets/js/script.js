@@ -1114,6 +1114,16 @@ modalOverlay.addEventListener("click", (e) => {
 
 });
 
+function toggleMenu() {
+  document.getElementById("menuDropdown").classList.toggle("show");
+}
+
+window.addEventListener("click", (e) => {
+  if(!e.target.closest(".menu-container")){
+    document.getElementById("menuDropdown").classList.remove("show");
+  }
+})
+
 nomeCliente = document.getElementById("nomeCliente");
 const contadorNome = document.getElementById("contadorNome");
 nomeCliente.addEventListener("input", function(){
