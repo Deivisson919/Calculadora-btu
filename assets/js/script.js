@@ -51,7 +51,6 @@ function parseNumero(valor) {
   }
   return parseFloat(valor);
 }
-
 function calcularBTU() {
 
   let nomeInput = document.getElementById("nomeAmbiente");
@@ -79,33 +78,50 @@ function calcularBTU() {
   let inputComprimento = document.getElementById("comprimento");
   let inputSol = document.getElementById("sol");
   let inputJanela = document.getElementById("janela");
+  let  inputParedes = document.getElementById("paredes");
+  let inputJanelas = document.getElementById("janelas");
+
 
   if (!largura || largura <= 0) {
     inputLargura.classList.add("erro");
-    return;
+    return false;
   } else {
     inputLargura.classList.remove("erro");
   }
 
   if (!comprimento || comprimento <= 0) {
     inputComprimento.classList.add("erro");
-    return;
+    return false;
   } else {
     inputComprimento.classList.remove("erro");
   }
 
   if (paredes > 0 && sol === "") {
     inputSol.classList.add("erro");
-    return;
+    return false;
   } else {
     inputSol.classList.remove("erro");
+  }
+  
+  if(sol !== "" && paredes <= 0){
+      inputParedes.classList.add("erro");
+      return false;
+  } else{
+    inputParedes.classList.remove("erro")
   }
 
   if (janelas > 0 && tipoJanela === "") {
     inputJanela.classList.add("erro");
-    return;
+    return false;
   } else {
     inputJanela.classList.remove("erro");
+  }
+
+  if(tipoJanela !== "" && janelas<= 0) {
+      inputJanelas.classList.add("erro");
+      return false; 
+  } else{
+      inputJanelas.classList.remove("erro");
   }
 
   let pessoasExtra = pessoas > 1 ? pessoas - 1 : 0;
@@ -204,6 +220,7 @@ function calcularBTU() {
   rec = recomendacaoFinal(btuTotal);
   dataProjeto = new Date().toLocaleDateString("pt-BR");
 
+  return true;
 }
 
 function salvarProjeto() {
@@ -790,14 +807,16 @@ let modoVisualizacao = false;
 function acaoBotao(){
   if (modoVisualizacao){
      voltarParaCalculo();
- 
   }
+
   else {
-    calcularBTU();
-    salvarProjeto();
-    carregarHistorico();
-    criarPDF();
-    resetarTela();
+
+    if(!calcularBTU()) return;
+
+      salvarProjeto();
+      carregarHistorico();
+      criarPDF();
+      resetarTela();
   }
 }
 
@@ -940,6 +959,15 @@ window.addEventListener("load", function () {
       this.classList.remove("erro");
     }
   });
+
+  inputParedes.addEventListener("input", function(){
+    this.classList.remove("erro");
+  })
+
+  inputJanelas.addEventListener("input", function(){
+    this.classList.remove("erro");
+  });
+
 });
 
 
