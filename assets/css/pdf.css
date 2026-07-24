@@ -148,6 +148,7 @@
   color: white;
   width: 100%;
   max-width: 500px;
+  box-sizing: content-box;
 }
 
 .btu-topo {

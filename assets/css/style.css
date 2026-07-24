@@ -1,3 +1,8 @@
+* {
+  box-sizing: border-box;
+}
+
+
 body {
   background: url("../Images/Fundo.png") no-repeat center center;
   background-size: cover;
@@ -17,21 +22,23 @@ body {
 }
 
 header {
+  width: 100%;
   height: 70px;
-  background: #ffffff;
+  background: rgb(255, 255, 255);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 30px;
+  padding: 0 15px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, .08);
   position: static;
   top: 0;
   z-index: 1000;
+  box-sizing: border-box;
+
 }
 
 .logo-area {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   gap: 10px;
 }
@@ -116,6 +123,10 @@ header {
 
 #campoDistribuicao {
   display: none;
+}
+
+#tipoDistribuicao {
+  margin-top: 10px;
 }
 
 #resultado,
@@ -355,6 +366,7 @@ select:focus {
 /*responsivo*/
 
 @media (max-width: 480px) {
+
   .grid {
     grid-template-columns: 1fr;
   }
@@ -364,16 +376,11 @@ select:focus {
   }
 
 
-  body {
-    padding: 0 20px;
+  .container {
+    padding: 0 20px
   }
 
 }
-
-.container {
-  margin-top: 30px;
-}
-
 
 .modal-overlay {
   position: fixed;
@@ -399,7 +406,7 @@ select:focus {
 
 .modal-pdf {
 
-  width: 95%;
+  width: 90%;
   max-width: 700px;
 
   background: white;
@@ -424,24 +431,19 @@ select:focus {
     opacity: 1;
     transform: translateY(0);
   }
-
 }
 
 .fechar-modal {
-
   position: absolute;
-
-  top: 5px;
+  top: 15px;
   right: 15px;
-
   border: none;
   background: red;
-
   font-size: 20px;
-
   cursor: pointer;
-
+  color: white;
   width: 50px;
+  border-radius: 5px;
 }
 
 .modal-pdf h2 {
