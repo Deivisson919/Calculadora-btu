@@ -704,7 +704,7 @@ select:focus {
 @media (max-width: 480px) {
 
   #app {
-    margin: 20px;
+    margin: 10px;
   }
 
   .grid {
