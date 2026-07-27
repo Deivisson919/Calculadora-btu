@@ -84,13 +84,13 @@ header {
   right: 0;
   top: 50px;
   width: 240px;
-  height: 250px;
+  height: 280px;
   background: white;
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, .15);
   overflow: hidden;
   flex-direction: column;
-  padding: 0 10px;
+  padding: 20px;
 }
 
 .menu-dropdown.show {
