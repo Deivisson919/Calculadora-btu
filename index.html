@@ -25,7 +25,7 @@
         ☰
       </button>
       <div class="menu-dropdown" id="menuDropdown">
-        <a href="#" onclick="abrirConfiguracaoPDF()">
+        <a href="#" onclick="abrirTela('telaConfiguracao')">
           Configurações do PDF
         </a>
 
@@ -48,193 +48,267 @@
     </div>
   </header>
 
-  <div class="container">
+  <main id="app">
+    <section id="telaCalculadora">
+      <div class="container">
 
-    <div class="card">
-      <div class="name"><!-- NOME DO AMBIENTE -->
-        <h3>Nome do ambiente:</h3>
-        <input type="text" id="nomeAmbiente" placeholder="Ex: Sala, Quarto, Cozinha">
-      </div>
+        <div class="card">
+          <div class="name"><!-- NOME DO AMBIENTE -->
+            <h3>Nome do ambiente:</h3>
+            <input type="text" id="nomeAmbiente" placeholder="Ex: Sala, Quarto, Cozinha">
+          </div>
 
-      <!-- INPUTS -->
-      <div class="grid">
-        <input type="number" id="largura" placeholder="Largura (m)">
-        <input type="number" id="comprimento" placeholder="Comprimento (m)">
-        <input type="number" id="pessoas" placeholder="Quantidade de pessoas">
-        <input type="number" id="eletronicos" placeholder="Eletrônicos">
-        <input type="number" id="portas" placeholder="Portas externas">
-        <input type="number" id="janelas" placeholder="Janelas">
-        <input type="number" id="paredes" placeholder="Paredes no sol">
-      </div>
+          <!-- INPUTS -->
+          <div class="grid">
+            <input type="number" id="largura" placeholder="Largura (m)">
+            <input type="number" id="comprimento" placeholder="Comprimento (m)">
+            <input type="number" id="pessoas" placeholder="Quantidade de pessoas">
+            <input type="number" id="eletronicos" placeholder="Eletrônicos">
+            <input type="number" id="portas" placeholder="Portas externas">
+            <input type="number" id="janelas" placeholder="Janelas">
+            <input type="number" id="paredes" placeholder="Paredes no sol">
+          </div>
 
-      <!-- CONFIGURAÇÕES -->
-      <div class="section">
-        <label>Tamanho das janelas</label>
-        <select id="janela">
-          <option value="">Selecione</option>
-          <option value="1">Pequena</option>
-          <option value="2">Média</option>
-          <option value="3">Grande</option>
-        </select>
-      </div>
+          <!-- CONFIGURAÇÕES -->
+          <div class="section">
+            <label>Tamanho das janelas</label>
+            <select id="janela">
+              <option value="">Selecione</option>
+              <option value="1">Pequena</option>
+              <option value="2">Média</option>
+              <option value="3">Grande</option>
+            </select>
+          </div>
 
-      <div class="section">
-        <label>Incidência solar</label>
-        <select id="sol">
-          <option value="">Selecione</option>
-          <option value="1">Sol o dia todo</option>
-          <option value="2">Meio período</option>
-          <option value="0">Sem sol</option>
-        </select>
-      </div>
+          <div class="section">
+            <label>Incidência solar</label>
+            <select id="sol">
+              <option value="">Selecione</option>
+              <option value="1">Sol o dia todo</option>
+              <option value="2">Meio período</option>
+              <option value="0">Sem sol</option>
+            </select>
+          </div>
 
-      <div class="section">
-        <label>Teto possui forro?</label>
-        <select id="forro">
-          <option value="">Selecione</option>
-          <option value="1">Não</option>
-          <option value="0">Sim</option>
-        </select>
-      </div>
+          <div class="section">
+            <label>Teto possui forro?</label>
+            <select id="forro">
+              <option value="">Selecione</option>
+              <option value="1">Não</option>
+              <option value="0">Sim</option>
+            </select>
+          </div>
 
-      <!-- BOTÃO -->
-      <button id="btnCalcular" type="button" onclick="acaoBotao()">Calcular</button>
+          <!-- BOTÃO -->
+          <button id="btnCalcular" type="button" onclick="acaoBotao()">Calcular</button>
 
-    </div><!--card-->
+        </div><!--card-->
 
-    <div class="card">
+        <div class="card">
 
-      <!-- RESULTADO -->
-      <div class="resultado-box">
+          <!-- RESULTADO -->
+          <div class="resultado-box">
 
-        <h2>Resultado</h2>
+            <h2>Resultado</h2>
 
-        <p><strong>Carga térmica:</strong></p>
-        <div id="resultado" class="resultado"></div>
+            <p><strong>Carga térmica:</strong></p>
+            <div id="resultado" class="resultado"></div>
 
-        <div class="recomendacao-box">
-          <h3>Recomendação:</h3>
-          <div id="recomendacao"></div>
-        </div>
-        <div id="pdfResultado"></div>
+            <div class="recomendacao-box">
+              <h3>Recomendação:</h3>
+              <div id="recomendacao"></div>
+            </div>
+            <div id="pdfResultado"></div>
 
-        <div class="distribuicao-box" id="boxDistribuicao" style="display: none;">
-          <h3>Distribuição de ar:</h3>
-          <div id="distribuicao"></div>
-          <div id="pdfDistribuicao"></div>
-        </div>
-      </div>
+            <div class="distribuicao-box" id="boxDistribuicao" style="display: none;">
+              <h3>Distribuição de ar:</h3>
+              <div id="distribuicao"></div>
+              <div id="pdfDistribuicao"></div>
+            </div>
+          </div>
 
-      <!-- HISTÓRICO -->
-      <div id="historico" class="historico-box">
-        <h2>Histórico</h2>
-      </div>
+          <!-- HISTÓRICO -->
+          <div id="historico" class="historico-box">
+            <h2>Histórico</h2>
+          </div>
 
-    </div>
-
-  </div>
-
-  <div class="pdf" style="position: absolute; left: -99999px; top: 0; visibility: hidden;">
-    <div id="pdfArea">
-      <div class="pdf-page">
-
-        <div class="pdf-header">
-        </div>
-
-        <div class="pdf-info">
-        </div>
-
-        <div class="pdf-btu-card">
-        </div>
-
-        <div class="pdf-resumo">
         </div>
 
       </div>
-    </div>
-  </div>
 
+      <div class="pdf" style="position: absolute; left: -99999px; top: 0; visibility: hidden;">
+        <div id="pdfArea">
+          <div class="pdf-page">
 
-  <!-- OVERLAY -->
-  <div class="modal-overlay" id="modalOverlay">
+            <div class="pdf-header">
+            </div>
 
-    <!-- MODAL -->
-    <div class="modal-pdf">
+            <div class="pdf-info">
+            </div>
 
-      <button class="fechar-modal" id="fecharModal">
-        ✕
-      </button>
+            <div class="pdf-btu-card">
+            </div>
 
-      <h2>Gerar PDF</h2>
+            <div class="pdf-resumo">
+            </div>
 
-      <p class="subtitulo-modal">
-        Preencha os dados abaixo para gerar o PDF.
-      </p>
-
-      <!-- CLIENTE -->
-      <div class="campo-modal">
-
-        <label>
-          Nome do cliente:
-        </label>
-
-        <input type="text" id="nomeCliente" placeholder="Digite o nome do cliente" maxlength="40">
-        <small id="contadorNome">Contador de Letras: 0/40</small>
-
+          </div>
+        </div>
       </div>
 
-      <div class="modal-overlay" id="modalAviso">
 
-        <div class="modal-aviso">
+      <!-- OVERLAY -->
+      <div class="modal-overlay" id="modalOverlay">
 
-          <h2 id="tituloAviso">Atenção!</h2>
+        <!-- MODAL -->
+        <div class="modal-pdf">
 
-          <p id="mensagemAviso"></p>
+          <button class="fechar-modal" id="fecharModal">
+            ✕
+          </button>
 
-          <button id="btnFecharAviso">
-            OK
+          <h2>Gerar PDF</h2>
+
+          <p class="subtitulo-modal">
+            Preencha os dados abaixo para gerar o PDF.
+          </p>
+
+          <!-- CLIENTE -->
+          <div class="campo-modal">
+
+            <label>
+              Nome do cliente:
+            </label>
+
+            <input type="text" id="nomeCliente" placeholder="Digite o nome do cliente" maxlength="40">
+            <small id="contadorNome">Contador de Letras: 0/40</small>
+
+          </div>
+
+          <div class="modal-overlay" id="modalAviso">
+
+            <div class="modal-aviso">
+
+              <h2 id="tituloAviso">Atenção!</h2>
+
+              <p id="mensagemAviso"></p>
+
+              <button id="btnFecharAviso">
+                OK
+              </button>
+
+            </div>
+
+          </div>
+
+          <!-- DISTRIBUIÇÕES -->
+          <div class="campo-modal" id="campoDistribuicao">
+
+            <label>
+              Escolha uma distribuição:
+            </label>
+
+            <select id="tipoDistribuicao">
+
+              <option value="">
+                Escolha uma distribuição:
+              </option>
+
+              <option value="aberto">
+                Espaço aberto
+              </option>
+
+              <option value="medio">
+                Média dificuldade de circulação
+              </option>
+
+              <option value="dificil">
+                Grande dificuldade de circulação
+              </option>
+
+            </select>
+
+          </div>
+
+          <!-- BOTÃO -->
+          <button type="button" class="btn-gerar" id="btnConfirmarPDF">
+            Gerar PDF
           </button>
 
         </div>
-
       </div>
+    </section>
 
-      <!-- DISTRIBUIÇÕES -->
-      <div class="campo-modal" id="campoDistribuicao">
+    <section id="telaConfiguracao">
+      <div class="configuracao-pdf">
 
-        <label>
-          Escolha uma distribuição:
-        </label>
+        <div class="card-config">
 
-        <select id="tipoDistribuicao">
+          <div class="header-configuracao">
+            <h2>Configurações do PDF</h2>
+            <p>
+              Configure as informações que serão exibidas automaticamente nos relatórios.
+            </p>
+          </div>
+          <h3>Logo</h3>
+          <div class="logo-config">
+            <img id="previewLogoPDF" src="assets/Images/img-header.png" alt="Logo">
+            <label for="logoPDF" class="btn-upload-logo">Escolher Logo</label>
 
-          <option value="">
-            Escolha uma distribuição:
-          </option>
+            <input type="file" id="logoPDF" accept=".png,.jpg,.jpeg,.webp" hidden>
 
-          <option value="aberto">
-            Espaço aberto
-          </option>
+            <button type="button" id="btnRemoverLogo" class="btn-secundario">Restaurar Logo Padrão</button>
 
-          <option value="medio">
-            Média dificuldade de circulação
-          </option>
+            <small>
+              Caso nenhuma logo seja enviada, será utilizada a logo padrão.
+            </small>
+          </div>
 
-          <option value="dificil">
-            Grande dificuldade de circulação
-          </option>
+          <div class="card-config">
+            <h3>Responvável Técnico</h3>
+            <div class="campo">
+              <label for="responsavelPDF">
+                Nome e Sobrenome:
+              </label>
+              <input type="text" id="responsavelPDF" placeholder="Ex: Luiz Aranha">
+            </div>
 
-        </select>
+            <div class="campo">
+              <label for="creaPDF">
+                Crea:
+              </label>
 
-      </div>
+              <input type="text" id="creaPDF" placeholder="Ex: CREA-SP 123456789">
+            </div>
+          </div>
 
-      <!-- BOTÃO -->
-      <button type="button" class="btn-gerar" id="btnConfirmarPDF">
-        Gerar PDF
-      </button>
+          <div class="card-config">
+            <h3>Contato</h3>
+            <div class="campo">
+              <label for="telefonePDF">
+                Telefone:
+              </label>
+              <input type="text" placeholder="(11) 99999-9999" id="telefonePDF">
+            </div>
 
-    </div>
-  </div>
+            <div class="campo">
+              <label for="emailPDF">
+                E-mail:
+              </label>
+              <input type="text" id="emailPDF" placeholder="contato@empresa.com.br">
+            </div>
+          </div>
+
+          <div class="acoes-config">
+            <button id="btnSalvarConfiguracaoPDF">Salvar Configurações</button>
+            <button onclick="abrirTela('telaCalculadora')" class="botaoDescartar">Descartar Alterações</button>
+          </div>
+        </div>
+
+      </div><!--config pdf-->
+    </section>
+
+  </main>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
@@ -245,6 +319,8 @@
   <script src="assets/js/pdf.js"></script>
 
   <script src="assets/js/script.js"></script>
+
+  <script src="assets/js/config-pdf.js"></script>
 
 </body>
 

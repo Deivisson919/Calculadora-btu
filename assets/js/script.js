@@ -42,6 +42,23 @@ let resultadoDistribuicao = "";
 const capacidades = [9000, 12000, 18000, 24000, 30000, 36000, 48000, 60000];
 const LIMITE_DISTRIBUICAO = 180000;
 
+function abrirTela(idTela){
+   const telas = document.querySelectorAll("#app > section");
+   telas.forEach(tela => {
+      tela.style.display = "none";
+   });
+
+   const telaSelecionada = document.getElementById(idTela);
+   telaSelecionada.style.display = "block";
+   animarTela(telaSelecionada)
+}
+
+function animarTela(elemento) {
+  elemento.classList.remove("abrir");
+  void elemento.offsetWidth;
+  elemento.classList.add("abrir")
+}
+
 // 🔧 PARSE
 function parseNumero(valor) {
   if (!valor) return NaN;

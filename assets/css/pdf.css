@@ -417,8 +417,12 @@
   object-fit: cover;
 }
 
+.box-important * {
+  box-sizing: content-box;
+}
+
 .box-important {
-  max-width: 590px;
+  max-width: 600px;
   width: 100%;
   height: 330px;
   background-color: #F6F6F7;
