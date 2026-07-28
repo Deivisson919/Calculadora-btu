@@ -128,10 +128,7 @@ html2pdf()
 function montarPDF() {
   
   let pdfArea = document.getElementById("pdfArea");
-  let portas = parseInt(document.getElementById("portas").value) || 0;
-  let pessoas = parseInt(document.getElementById("pessoas").value) || 0;
-  let eletronicos = parseInt(document.getElementById("eletronicos").value) || 0;
-
+  const config = obterConfiguracoesPDF();
 
   pdfArea.innerHTML = `
 
@@ -176,7 +173,7 @@ function montarPDF() {
 
           <p>
             Responsável Técnico:<br>
-            DF Intelligence
+            ${config.responsavel}
           </p>
         </div>
 
@@ -251,12 +248,12 @@ function montarPDF() {
 
       <div class="footer-item">
         <img src="assets/Images/telephone.png" alt="Area">
-        <span>(99) 99999-9999</span>
+        <span>${config.telefone}</span>
       </div>
 
       <div class="footer-item">
         <img src="assets/Images/email.png" alt="Area">
-        <span>contato@empresaficticia.com.br</span>
+        <span>${config.email}</span>
       </div>
 
     </div>
