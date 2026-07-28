@@ -323,7 +323,6 @@ select:focus {
   width: 90%;
   text-align: center;
   animation: subirModal 0.3s ease;
-
 }
 
 .modal-aviso.saindo {
