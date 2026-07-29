@@ -169,12 +169,19 @@ function montarPDF() {
         </div>
 
         <div class="side-item">
+        
           <img src="assets/Images/user.png" alt="Usuário">
 
-          <p>
-            Responsável Técnico:<br>
-            ${config.responsavel}
-          </p>
+            <div class = "side-text">
+
+              <span class = "titulo">Responsável Técnico:</span>
+
+              <span class = "nome"> ${config.responsavel}</span>
+
+              <span class = "crea">${config.crea}</span>
+
+            </div>
+
         </div>
 
       </div>

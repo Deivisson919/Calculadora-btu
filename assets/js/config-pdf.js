@@ -22,37 +22,48 @@ function salvarConfiguracoesPDF(){
         JSON.stringify(config)
       );
 
-      mostrarAviso (
-        "Configurações salvas com sucesso."
-      );
-
       abrirTela("telaCalculadora");
 }
 
-function mostrarAviso(mensagem) {
 
-  const modal = document.getElementById("modalAvisoGlobal");
-
-  console.log(modal);
-
-  modal.classList.add("active");
-  
-  document.getElementById("mensagemAvisoGlobal").textContent = mensagem;
-  document.getElementById("modalAvisoGlobal").classList.add("active");
-}
-
-document.getElementById("btnFecharAvisoGlobal").addEventListener("click", () => {
-  document.getElementById("modalAvisoGlobal").classList.remove("active");
-});
 
 document.getElementById("btnSalvarConfiguracaoPDF").addEventListener("click", salvarConfiguracoesPDF);
 
 function carregarConfiguracoesPDF() {
-  const config = obterConfiguracoesPDF();
-  document.getElementById("telefonePDF").value = config.telefone;
-  document.getElementById("emailPDF").value = config.email;
-  document.getElementById("responsavelPDF").value = config.responsavel;
-  document.getElementById("creaPDF").value = config.crea;
+
+  const config = JSON.parse(localStorage.getItem("configuracoesPDF"));
+
+  if (!config) return;
+
+  document.getElementById("telefonePDF").value = config.telefone || "";
+  document.getElementById("emailPDF").value = config.email || "";
+  document.getElementById("responsavelPDF").value = config.responsavel || "";
+  document.getElementById("creaPDF").value = config.crea || "";
+
 }
+
+function formatarTelefone() {
+
+  let valor = inputTelefone.value.replace(/\D/g, "");
+
+  if (valor.length > 11) {
+      valor = valor.substring(0, 11);
+  }
+
+  if (valor.length > 2) {
+      valor = "(" + valor.substring(0, 2) + ") " + valor.substring(2);
+  }
+
+  if (valor.length > 10) {
+      valor = valor.substring(0, 10) + "-" + valor.substring(10);
+  }
+
+  inputTelefone.value = valor;
+
+}
+
+const inputTelefone = document.getElementById("telefonePDF");
+
+inputTelefone.addEventListener("input", formatarTelefone);
 
 carregarConfiguracoesPDF();
