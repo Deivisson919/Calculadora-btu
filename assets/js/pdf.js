@@ -129,6 +129,7 @@ function montarPDF() {
   
   let pdfArea = document.getElementById("pdfArea");
   const config = obterConfiguracoesPDF();
+  const logoPDF = config.logo || "assets/Images/img-header.png";
 
   pdfArea.innerHTML = `
 
@@ -142,7 +143,7 @@ function montarPDF() {
       <div class="pdf-header-left">
 
         <div class="pdf-img-header">
-          <img src="assets/Images/img-header.png" alt="Calendário">
+          <img src="${logoPDF}">
         </div>
 
         <div class="pdf-title">

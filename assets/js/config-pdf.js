@@ -14,7 +14,7 @@ function salvarConfiguracoesPDF(){
         email: document.getElementById("emailPDF").value,
         responsavel: document.getElementById("responsavelPDF").value,
         crea: document.getElementById("creaPDF").value,
-        logo: ""
+        logo: previewLogo.src
       };
 
       localStorage.setItem(
@@ -34,6 +34,10 @@ function carregarConfiguracoesPDF() {
   const config = JSON.parse(localStorage.getItem("configuracoesPDF"));
 
   if (!config) return;
+
+  if (config.logo){
+    previewLogo.src = config.logo;
+  }
 
   document.getElementById("telefonePDF").value = config.telefone || "";
   document.getElementById("emailPDF").value = config.email || "";
@@ -61,6 +65,24 @@ function formatarTelefone() {
   inputTelefone.value = valor;
 
 }
+
+const inputLogo = document.getElementById("logoPDF");
+const previewLogo = document.getElementById("previewLogoPDF");
+
+inputLogo.addEventListener("change", carregarLogo);
+
+function carregarLogo(){
+    const arquivo = inputLogo.files[0];
+    
+    if(!arquivo) return;
+
+    const reader  = new FileReader();
+    reader.onload = function (e) {
+      previewLogo.src = e.target.result;
+    };
+    reader.readAsDataURL(arquivo);
+  }
+
 
 const inputTelefone = document.getElementById("telefonePDF");
 
