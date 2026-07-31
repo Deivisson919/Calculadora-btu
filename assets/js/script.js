@@ -888,7 +888,7 @@ function editarItem(index) {
 
 function carregarHistorico() {
   let historico = JSON.parse(localStorage.getItem("historicoBTU")) || [];
-  let html = "<h3>Histórico</h3>";
+  let html = "<h3>Históricos Recentes</h3>";
 
   historico
     .map((item, index) => ({ item, index })) // preserva índice original
@@ -981,7 +981,7 @@ window.addEventListener("load", function () {
     this.classList.remove("erro");
   })
 
-  inputJanelas.addEventListener("input", function(){
+  inputJanela.addEventListener("input", function(){
     this.classList.remove("erro");
   });
 
@@ -993,8 +993,6 @@ const modalOverlay =
 
 const btnConfirmarPDF =
   document.getElementById("btnConfirmarPDF");
-
- 
 
 const fecharModal =
   document.getElementById("fecharModal");

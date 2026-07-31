@@ -21,27 +21,27 @@
     </div>
 
     <div class="menu-container">
-      <button class="menu-button" onclick="toggleMenu()">
+      <button class="menu-button" title="Menu" onclick="toggleMenu()">
         ☰
       </button>
       <div class="menu-dropdown" id="menuDropdown">
-        <a href="#" onclick="abrirTela('telaConfiguracao')">
+        <a href="#" title="Configurações" onclick="abrirTela('telaConfiguracao')">
           Configurações do PDF
         </a>
 
-        <a href="#">
+        <a href="#" title="Informações">
           Informações
         </a>
 
-        <a href="#">
+        <a href="#" title="Minha Conta">
           Minha Conta
         </a>
 
-        <a href="#">
+        <a href="#" title="Projetos Salvos">
           Projetos Salvos
         </a>
 
-        <a href="#" class="exit" onclick="logout()">
+        <a href="#" class="exit" title="Sair" onclick="logout()">
           Sair
         </a>
       </div>
@@ -55,24 +55,24 @@
         <div class="card">
           <div class="name"><!-- NOME DO AMBIENTE -->
             <h3>Nome do ambiente:</h3>
-            <input type="text" id="nomeAmbiente" placeholder="Ex: Sala, Quarto, Cozinha">
+            <input type="text" id="nomeAmbiente" title="Ambiente" placeholder="Ex: Sala, Quarto, Cozinha">
           </div>
 
           <!-- INPUTS -->
           <div class="grid">
-            <input type="number" id="largura" placeholder="Largura (m)">
-            <input type="number" id="comprimento" placeholder="Comprimento (m)">
-            <input type="number" id="pessoas" placeholder="Quantidade de pessoas">
-            <input type="number" id="eletronicos" placeholder="Eletrônicos">
-            <input type="number" id="portas" placeholder="Portas externas">
-            <input type="number" id="janelas" placeholder="Janelas">
-            <input type="number" id="paredes" placeholder="Paredes no sol">
+            <input type="number" id="largura" title="Largura" placeholder="Largura (m)">
+            <input type="number" id="comprimento" title="Comprimento" placeholder="Comprimento (m)">
+            <input type="number" id="pessoas" title="Quantidade de Pessoas" placeholder="Quantidade de pessoas">
+            <input type="number" id="eletronicos" title="Quantidade de Eletrônicos" placeholder="Eletrônicos">
+            <input type="number" id="portas" title="Quantidade de Portas Externas" placeholder="Portas externas">
+            <input type="number" id="janelas" title="Quantidade de Janelas" placeholder="Janelas">
+            <input type="number" id="paredes" title="Quantidade de Paredes ao Sol" placeholder="Paredes no sol">
           </div>
 
           <!-- CONFIGURAÇÕES -->
           <div class="section">
             <label>Tamanho das janelas</label>
-            <select id="janela">
+            <select id="janela" title="Tamanho das Janelas">
               <option value="">Selecione</option>
               <option value="1">Pequena</option>
               <option value="2">Média</option>
@@ -82,7 +82,7 @@
 
           <div class="section">
             <label>Incidência solar</label>
-            <select id="sol">
+            <select id="sol" title="Incidência solar">
               <option value="">Selecione</option>
               <option value="1">Sol o dia todo</option>
               <option value="2">Meio período</option>
@@ -92,7 +92,7 @@
 
           <div class="section">
             <label>Teto possui forro?</label>
-            <select id="forro">
+            <select id="forro" title="Forro">
               <option value="">Selecione</option>
               <option value="1">Não</option>
               <option value="0">Sim</option>
@@ -100,7 +100,7 @@
           </div>
 
           <!-- BOTÃO -->
-          <button id="btnCalcular" type="button" onclick="acaoBotao()">Calcular</button>
+          <button id="btnCalcular" type="button" onclick="acaoBotao()" title="Calcular">Calcular</button>
 
         </div><!--card-->
 
@@ -253,11 +253,12 @@
           <h3>Logo</h3>
           <div class="logo-config">
             <img id="previewLogoPDF" src="assets/Images/img-header.png" alt="Logo">
-            <label for="logoPDF" class="btn-upload-logo">Escolher Logo</label>
+            <label for="logoPDF" class="btn-upload-logo" title="Escolher">Escolher Logo</label>
 
             <input type="file" id="logoPDF" accept=".png,.jpg,.jpeg,.webp" hidden>
 
-            <button type="button" id="btnRemoverLogo" class="btn-secundario">Restaurar Logo Padrão</button>
+            <button type="button" id="btnRemoverLogo" title="Restaurar" class="btn-secundario">Restaurar Logo
+              Padrão</button>
 
             <small>
               Caso nenhuma logo seja enviada, será utilizada a logo padrão.
@@ -270,7 +271,7 @@
               <label for="responsavelPDF">
                 Nome e Sobrenome:
               </label>
-              <input type="text" id="responsavelPDF" placeholder="Ex: Luiz Aranha">
+              <input type="text" id="responsavelPDF" placeholder="Ex: Luiz Aranha" title="Nome e Sobrenome">
             </div>
 
             <div class="campo">
@@ -278,7 +279,7 @@
                 Crea:
               </label>
 
-              <input type="text" id="creaPDF" placeholder="Ex: CREA-SP 123456789">
+              <input type="text" id="creaPDF" placeholder="Ex: CREA-SP 123456789" title="Crea">
             </div>
           </div>
 
@@ -288,20 +289,21 @@
               <label for="telefonePDF">
                 Telefone:
               </label>
-              <input type="text" placeholder="(11) 99999-9999" id="telefonePDF">
+              <input type="text" placeholder="(11) 99999-9999" id="telefonePDF" title="Telefone">
             </div>
 
             <div class="campo">
               <label for="emailPDF">
                 E-mail:
               </label>
-              <input type="text" id="emailPDF" placeholder="contato@empresa.com.br">
+              <input type="text" id="emailPDF" placeholder="contato@empresa.com.br" title="E-mail">
             </div>
           </div>
 
           <div class="acoes-config">
-            <button id="btnSalvarConfiguracaoPDF">Salvar Configurações</button>
-            <button onclick="abrirTela('telaCalculadora')" class="botaoDescartar">Descartar Alterações</button>
+            <button id="btnSalvarConfiguracaoPDF" title="Salvar">Salvar Configurações</button>
+            <button onclick="abrirTela('telaCalculadora')" class="botaoDescartar" title="Descartar">Descartar
+              Alterações</button>
           </div>
         </div>
 
