@@ -43,14 +43,21 @@ const capacidades = [9000, 12000, 18000, 24000, 30000, 36000, 48000, 60000];
 const LIMITE_DISTRIBUICAO = 180000;
 
 function abrirTela(idTela){
-   const telas = document.querySelectorAll("#app > section");
-   telas.forEach(tela => {
-      tela.style.display = "none";
-   });
 
-   const telaSelecionada = document.getElementById(idTela);
-   telaSelecionada.style.display = "block";
-   animarTela(telaSelecionada)
+  // Fecha o menu
+  fecharMenu();
+
+  const telas = document.querySelectorAll("#app > section");
+
+  telas.forEach(tela => {
+     tela.style.display = "none";
+  });
+
+  const telaSelecionada = document.getElementById(idTela);
+
+  telaSelecionada.style.display = "block";
+
+  animarTela(telaSelecionada);
 }
 
 function animarTela(elemento) {
@@ -59,7 +66,24 @@ function animarTela(elemento) {
   elemento.classList.add("abrir")
 }
 
-// 🔧 PARSE
+function fecharMenu() {
+  const menu = document.getElementById("menuDropdown");
+  menu.classList.remove("show");
+}
+
+function toggleMenu() {
+  const menu = document.getElementById("menuDropdown");
+  menu.classList.toggle("show");
+}
+
+window.addEventListener("click", fecharMenuAoClicarFora);
+
+function fecharMenuAoClicarFora(e){
+  if (!e.target.closest(".menu-container")){
+    document.getElementById("menuDropdown").classList.remove("show");
+  }
+}
+
 function parseNumero(valor) {
   if (!valor) return NaN;
   valor = valor.toString().trim();
@@ -1156,19 +1180,6 @@ modalOverlay.addEventListener("click", (e) => {
   }
 
 });
-
-function toggleMenu() {
-  const menu = document.getElementById("menuDropdown");
-  menu.classList.toggle("show");
-}
-
-window.addEventListener("click", fecharMenuAoClicarFora);
-
-function fecharMenuAoClicarFora(e){
-  if (!e.target.closest(".menu-container")){
-    document.getElementById("menuDropdown").classList.remove("show");
-  }
-}
 
 nomeCliente = document.getElementById("nomeCliente");
 const contadorNome = document.getElementById("contadorNome");

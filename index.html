@@ -4,9 +4,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calculadora</title>
+  <title>Air Confort</title>
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/pdf.css">
+  <link rel="stylesheet" href="assets/css/informacoes.css">
   <link rel="icon" href="assets/Images/snowflake1.jpg">
 </head>
 
@@ -29,7 +30,7 @@
           Configurações do PDF
         </a>
 
-        <a href="#" title="Informações">
+        <a href="#" title="Informações" onclick="abrirTela('telaInformacao')">
           Informações
         </a>
 
@@ -310,6 +311,187 @@
       </div><!--config pdf-->
     </section>
 
+    <section id="telaInformacao">
+      <div class="tela-informacoes">
+
+        <h1>INFORMAÇÕES</h1>
+
+        <div class="linha"></div>
+
+        <!-- 1. LIMITE -->
+        <section class="info-section">
+          <h2>1. LIMITE DA CALCULADORA</h2>
+
+          <p>
+            A Calculadora BTU foi desenvolvida para realizar cálculos
+            de carga térmica de até <strong>180.000 BTU/h.</strong>
+          </p>
+
+          <p>
+            Quando a carga térmica calculada ultrapassar esse limite,
+            o sistema não realizará uma recomendação automática de equipamentos.
+          </p>
+
+          <p>
+            Nesses casos, recomenda-se uma avaliação técnica específica
+            do projeto, considerando as características do ambiente e da instalação.
+          </p>
+        </section>
+
+
+        <div class="linha"></div>
+
+
+        <!-- 2. COMO FUNCIONA O CÁLCULO -->
+        <section class="info-section">
+          <h2>2. COMO FUNCIONA O CÁLCULO</h2>
+
+          <p>
+            O cálculo da carga térmica do ambiente é baseado em fatores
+            que influenciam diretamente a quantidade de calor presente no espaço.
+            São considerados:
+          </p>
+
+          <ul>
+            <li>
+              <strong>Área do ambiente</strong>
+            </li>
+
+            <li>
+              <strong>Pessoas</strong>
+            </li>
+
+            <li>
+              <strong>Equipamentos eletrônicos</strong>
+            </li>
+
+            <li>
+              <strong>Portas</strong>
+            </li>
+
+            <li>
+              <strong>Janelas</strong>
+            </li>
+
+            <li>
+              <strong>Incidência solar</strong>
+            </li>
+
+            <li>
+              <strong>Paredes externas</strong>
+            </li>
+
+            <li>
+              <strong>Forro</strong>
+            </li>
+          </ul>
+
+          <p>
+            A soma de todos esses fatores resulta na carga térmica
+            total do ambiente, em BTU/h.
+          </p>
+        </section>
+
+
+        <div class="linha"></div>
+
+
+        <!-- 3. COMO O RESULTADO É DEFINIDO -->
+        <section class="info-section">
+          <h2>3. COMO O RESULTADO É DEFINIDO</h2>
+
+          <p>
+            Após o cálculo da carga térmica total, o sistema compara
+            o resultado com as capacidades disponíveis de equipamentos
+            de ar-condicionado.
+          </p>
+
+          <p>
+            A recomendação segue as seguintes regras:
+          </p>
+
+          <ul>
+            <li>
+              Se o valor estiver dentro da capacidade de um único equipamento,
+              será recomendado apenas um aparelho.
+            </li>
+
+            <li>
+              Se o valor ultrapassar a capacidade de um único equipamento,
+              o sistema buscará a melhor combinação entre dois ou mais aparelhos.
+            </li>
+
+            <li>
+              A escolha considera a eficiência, o equilíbrio da distribuição
+              e a viabilidade de instalação.
+            </li>
+          </ul>
+
+          <p>
+            O objetivo é oferecer uma solução que proporcione conforto térmico
+            com o melhor aproveitamento dos equipamentos disponíveis.
+          </p>
+        </section>
+
+
+        <div class="linha"></div>
+
+
+        <!-- 4. CONFIGURAÇÕES DO PDF -->
+        <section class="info-section">
+          <h2>4. CONFIGURAÇÕES DO PDF</h2>
+
+          <p>
+            Na tela de Configurações do PDF, você pode personalizar
+            as informações que aparecerão no seu relatório.
+          </p>
+
+          <p>É possível definir:</p>
+
+          <ul>
+            <li>
+              <strong>Logo da empresa:</strong>
+              Sua marca será exibida no cabeçalho do PDF.
+            </li>
+
+            <li>
+              <strong>Responsável técnico:</strong>
+              Nome do profissional responsável pelo projeto.
+            </li>
+
+            <li>
+              <strong>CREA:</strong>
+              Número de registro do responsável técnico.
+            </li>
+
+            <li>
+              <strong>Telefone:</strong>
+              Número de contato que será exibido no relatório.
+            </li>
+
+            <li>
+              <strong>E-mail:</strong>
+              E-mail de contato que será exibido no relatório.
+            </li>
+          </ul>
+
+          <p>
+            Essas informações permitem que o PDF gerado tenha
+            a identidade da sua empresa e transmita mais profissionalismo
+            aos seus clientes.
+          </p>
+        </section>
+
+
+        <!-- BOTÃO VOLTAR -->
+        <div class="info-voltar">
+          <button onclick="abrirTela('telaCalculadora')">
+            Voltar
+          </button>
+        </div>
+
+      </div>
+    </section><!--Informações-->
   </main>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
